@@ -38,7 +38,7 @@ app.post('/wxconfig', async (req, res) => {
 
 async function getAccessToken () {
   try {
-    const tokenString = fs.readFileSync(path.join(__dirname, 'accessToken.json'));
+    const tokenString = fs.readFileSync(path.join(__dirname, 'json', 'accessToken.json'));
     const token = JSON.parse(tokenString);
     if (Date.now() >= token.expires_time) {
       const tokenObj = await requireAccessToken();
@@ -66,7 +66,7 @@ function updateAccessToken (token) {
   const tokenJson = JSON.stringify(token);
 
   try {
-    fs.writeFileSync(path.join(__dirname, 'accessToken.json'), tokenJson);
+    fs.writeFileSync(path.join(__dirname, 'json', 'accessToken.json'), tokenJson);
     return token.access_token;
   }catch(e) {
     return undefined;
@@ -75,7 +75,7 @@ function updateAccessToken (token) {
 
 async function getJsapiTicket (token) {
   try {
-    const ticketString = fs.readFileSync(path.join(__dirname, 'jsapiTicket.json'));
+    const ticketString = fs.readFileSync(path.join(__dirname, 'json', 'jsapiTicket.json'));
     const ticket = JSON.parse(ticketString);
     if (Date.now() >= ticket.expires_time) {
       const ticketString = await requireJsapiTicket(token);
@@ -104,7 +104,7 @@ function updateJsapiTicket (ticket) {
   const ticketJson = JSON.stringify(ticketObj);
 
   try {
-    fs.writeFileSync(path.join(__dirname, 'jsapiTicket.json'), ticketJson);
+    fs.writeFileSync(path.join(__dirname, 'json', 'jsapiTicket.json'), ticketJson);
     return ticket;
   }catch(e) {
     return undefined;
