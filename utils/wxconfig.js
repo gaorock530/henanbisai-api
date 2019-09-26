@@ -1,3 +1,5 @@
+// for Front-end Api call
+
 import cuid from 'cuid';
 
 const jsApiList = [
