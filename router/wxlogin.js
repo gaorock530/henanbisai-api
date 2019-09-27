@@ -1,6 +1,8 @@
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const USER = require('../models/user');
+const useragent = require('useragent');
 
 module.exports = (app) => {
 
@@ -14,6 +16,7 @@ module.exports = (app) => {
     // encodeURIComponent('https://api.yingxitech.com/wxlogin?type=baoming');
     // https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx09fc8bca51c925c7&redirect_uri=https%3A%2F%2Fapi.yingxitech.com%2Fwxlogin%3Ftype%3Dbaoming&response_type=code&scope=snsapi_userinfo&state=baoming#wechat_redirect
     
+
     // Step 2
     // from Callback url get Code
     let responseObj = {res: "/wxlogin", domin: 'api.yingxitech.com'};
@@ -56,14 +59,32 @@ module.exports = (app) => {
     } catch (e) {
       console.log(e);
     }
-    
+
+    let nickname, pic, sex, wx_province, wx_city, wx_country, wx_subscribe_scene;
+    // subscribed User info - more
     const more_info = `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${api_token}&openid=${openid}&lang=zh_CN`;
+    // NOT subscribed User info - less
     const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
     try {
       const more_response = await axios.get(more_info); 
       console.log(more_response.data);
-      if (more_response.data.subscribe === 0) {
+
+      // User subscribed
+      if (more_response.data.subscribe === 1) {
+        openid = more_response.data.openid;
+        nickname = more_response.data.nickname;
+        pic = more_response.data.headimgurl;
+        sex = more_response.data.sex;
+        wx_province = more_response.data.province;
+        wx_city = more_response.data.city;
+        wx_country = more_response.data.country;
+        wx_subscribe_scene = more_response.data.subscribe_scene;
+      } else {
         const info_response = await axios.get(info_url); 
+        openid = info_response.data.openid;
+        nickname = info_response.data.nickname;
+        pic = info_response.data.headimgurl;
+        sex = info_response.data.sex;
         console.log(info_response.data);
       }
 
@@ -71,6 +92,35 @@ module.exports = (app) => {
       console.log(e);
       return res.send('发生错误，请关闭本页面，重新进入！{info}');
     }
+
+    // Step 5
+    // write / update Database
+
+    const agent = useragent.parse(req.headers['user-agent']);
+    const ip = getClientIP(req);
+
+    const user = new USER({
+      openid,
+      nickname,
+      pic,
+      sex,
+      wx_province,
+      wx_city,
+      wx_country,
+      wx_subscribe_scene,
+      registerDetails: {ip, client: agent.os.toString() + ' ' + agent.device.toString()},
+      lastVisit: {ip, client: agent.os.toString() + ' ' + agent.device.toString()}
+    });
+    
+    try {
+      // user.save();
+      console.log(user);
+    } catch(e) {
+      console.log(e);
+    }
+
+
+
 
     res.redirect('https://yingxitech.com/baoming');
   });
@@ -81,6 +131,20 @@ module.exports = (app) => {
   })
 
 }
+
+
+/**
+ * @getClientIP
+ * @desc 获取用户 ip 地址
+ * @param {Object} req - 请求
+ */
+function getClientIP(req) {
+  return req.headers['x-forwarded-for'] || // 判断是否有反向代理 IP
+      req.connection.remoteAddress || // 判断 connection 的远程 IP
+      req.socket.remoteAddress || // 判断后端的 socket 的 IP
+      req.connection.socket.remoteAddress;
+};
+
 
 async function getAccessToken () {
   try {
@@ -126,47 +190,34 @@ function updateAccessToken (token) {
   }
 }
 
-// function updateAccessToken (token) {
-//   token.expires_time = Date.now() + 7000000;
-//   const tokenJson = JSON.stringify(token);
+/**
+ * { openid: 'oGCPOwwKLIZNVOa8TOqUOsdbDpLs',
+  nickname: 'Punkhead',
+  sex: 1,
+  language: 'zh_CN',
+  city: '朝阳',
+  province: '北京',
+  country: '中国',
+  headimgurl: 'http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epuEehhH7ib4EAyYIpQSc4eiaDibxw1W6icib4oce4opZsJ8IvqJXKBuDVcF1Vtu6cnuZVCOIOZCG6zovQ/132',
+  privilege: [],
+  unionid: 'oubKi0vS-Euz7nPp7HrRRpMtfIGA' }
 
-//   try {
-//     fs.writeFileSync(path.join(__dirname, '..', 'json', 'loginAccessToken.json'), tokenJson);
-//     return token.access_token;
-//   }catch(e) {
-//     return undefined;
-//   }
-// }
 
-// async function getAccessToken (code) {
-//   try {
-//     const tokenString = fs.readFileSync(path.join(__dirname, '..', 'json', 'accessToken.json'));
-//     const token = JSON.parse(tokenString);
-//     if (Date.now() >= token.expires_time) {
-//       const tokenObj = await requireAccessToken();
-//       const res = updateAccessToken(tokenObj);
-//       if (res) return res;
-//     }
-//     return token.access_token;
-//   }catch(e) {
-//     const tokenObj = await requireAccessToken(code);
-//     const res = updateAccessToken(tokenObj);
-//     if (res) return res;
-//   } 
-// }
-
-// async function requireAccessToken (code) {
-//   const appid = 'wx09fc8bca51c925c7';
-//   const appsecret = '71372b2b8883842e519485e0da99432d';
-//   const url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${appid}&secret=${appsecret}`;
-//   const res = await axios.get(url);
-//   return res.data;
-// }
-
-// async function requireThroughRefreshToken (code) {
-//   const appid = 'wx09fc8bca51c925c7';
-//   const appsecret = '71372b2b8883842e519485e0da99432d';
-//   const url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${appid}&secret=${appsecret}`;
-//   const res = await axios.get(url);
-//   return res.data;
-// }
+  { subscribe: 1,
+  openid: 'oGCPOwwKLIZNVOa8TOqUOsdbDpLs',
+  nickname: 'Punkhead',
+  sex: 1,
+  language: 'zh_CN',
+  city: '朝阳',
+  province: '北京',
+  country: '中国',
+  headimgurl: 'http://thirdwx.qlogo.cn/mmopen/ajNVdqHZLLBBCBwkLkom5Ak5MicC1GehAcNibS2eSAyoExuw3asZeVh0FPStZ6A6iaJXT145tpg2LRbp44KDQRTVQ/132',
+  subscribe_time: 1569597561,
+  unionid: 'oubKi0vS-Euz7nPp7HrRRpMtfIGA',
+  remark: '',
+  groupid: 0,
+  tagid_list: [],
+  subscribe_scene: 'ADD_SCENE_PROFILE_LINK',
+  qr_scene: 0,
+  qr_scene_str: '' }
+ */

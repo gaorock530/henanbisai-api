@@ -13,6 +13,12 @@ app.set('x-powered-by', false);
 app.use(express.static('./public'));
 app.use(cors());
 app.use(bodyParser.json())
+// set custom HTTP Headers
+app.use((req, res, next) => {
+  res.setHeader('Server', 'MagicBox');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  next();
+});
 
 const PORT = process.env.PORT || 5000;
 

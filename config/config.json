@@ -1,7 +1,7 @@
 {
   "development": {
     "PORT": 5000,
-    "MONGODB_URI": "mongodb://magic:123456@localhost:27017/henanbisai",
+    "MONGODB_URI": "mongodb://magic:123456@localhost:27017/magic",
     "JWT_SECRET": "magicwillgetturelovein2018",
     "JWT_SECRET_FPS": "iamfrom2070feb11",
     "passSalt": "magicwillbethebestin2020",
