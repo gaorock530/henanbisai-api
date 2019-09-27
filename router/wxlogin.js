@@ -47,12 +47,12 @@ module.exports = (app) => {
 
     // Step 4
     // get User_info through openid
-
+    const more_info = `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
     const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
     try {
-      const info_response = await axios.get(info_url); 
+      const info_response = await axios.get(more_info); 
       console.log(info_response.data);
-      
+
     }catch(e) {
       console.log(e);
       return res.send('发生错误，请关闭本页面，重新进入！{info}');
