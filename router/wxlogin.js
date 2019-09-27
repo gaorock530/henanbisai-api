@@ -5,7 +5,7 @@ module.exports = (app) => {
   // user Register
   app.post('/wxlogin/getcode', async (req, res) => {
     const appid = 'wx09fc8bca51c925c7';
-    const redirect_uri = 'https%3A%2F%2yingxitech.com/login';
+    const redirect_uri = 'https://www.yingxitech.com/login';
     const scope = 'snsapi_userinfo';
     const state = '123abc';
     // const url = `https://open.weixin.qq.com/connect/qrconnect?appid=${appid}&redirect_uri=${redirect_uri}&response_type=code&scope=${scope}&state=${state}#wechat_redirect`;
