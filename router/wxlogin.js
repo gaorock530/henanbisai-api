@@ -60,7 +60,7 @@ module.exports = (app) => {
       console.log(e);
     }
 
-    let nickname, pic, sex, wx_province, wx_city, wx_country, wx_subscribe_scene;
+    let subscribe, nickname, pic, sex, wx_province, wx_city, wx_country, wx_subscribe_scene;
     // subscribed User info - more
     const more_info = `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${api_token}&openid=${openid}&lang=zh_CN`;
     // NOT subscribed User info - less
@@ -71,6 +71,7 @@ module.exports = (app) => {
 
       // User subscribed
       if (more_response.data.subscribe === 1) {
+        subscribe = true;
         openid = more_response.data.openid;
         nickname = more_response.data.nickname;
         pic = more_response.data.headimgurl;
@@ -80,6 +81,7 @@ module.exports = (app) => {
         wx_country = more_response.data.country;
         wx_subscribe_scene = more_response.data.subscribe_scene;
       } else {
+        subscribe = false;
         const info_response = await axios.get(info_url); 
         openid = info_response.data.openid;
         nickname = info_response.data.nickname;
@@ -122,7 +124,7 @@ module.exports = (app) => {
 
 
 
-    const redirect_url = `https://yingxitech.com/baoming?nickname=${nickname}&pic=${pic}`;
+    const redirect_url = `https://yingxitech.com/baoming?nickname=${nickname}&pic=${pic}&subscribe=${subscribe}`;
 
     res.redirect(redirect_url);
   });
