@@ -14,13 +14,13 @@ module.exports = (app) => {
     try {
       const response = await axios.get(url);
       console.log('Success:', response);
-      responseObj = response;
+      responseObj = response.data;
     } catch (error) {
       responseObj = error;
       console.error('Error:', error);
     }
 
-    res.send(responseObj);
+    res.send(JSON.stringify(responseObj));
   });
 
   app.get('/login', (req, res) => {
