@@ -13,7 +13,7 @@ module.exports = (app) => {
 
     let responseObj = {res: "/wxlogin/getcode"};
     try {
-      const response = await axios.get(url);
+      const response = await axios.post(url);
       console.log('Success:', response);
       responseObj.data = response.data;
     } catch (error) {
