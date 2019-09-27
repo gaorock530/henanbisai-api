@@ -47,8 +47,14 @@ module.exports = (app) => {
 
     // Step 4
     // get User_info through openid
-    const token = await getAccessToken();
-    const more_info = `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${token}&openid=${openid}&lang=zh_CN`;
+    let api_token;
+    try {
+      api_token = await getAccessToken();
+    } catch (e) {
+      console.log(e);
+    }
+    
+    const more_info = `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${api_token}&openid=${openid}&lang=zh_CN`;
     const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
     try {
       const info_response = await axios.get(more_info); 
