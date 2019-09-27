@@ -25,7 +25,8 @@ module.exports = (app) => {
   });
 
   app.get('/login', (req, res) => {
-    res.send('login')
+    console.log(req.params)
+    res.send('login');
   })
 
 }

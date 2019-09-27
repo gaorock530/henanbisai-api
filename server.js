@@ -25,5 +25,6 @@ app.listen(PORT, (e) => {
 // Routes
 require('./router/wxconfig')(app);
 require('./router/user')(app);
+require('./router/wxlogin')(app);
 
 
