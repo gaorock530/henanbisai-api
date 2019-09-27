@@ -2,7 +2,7 @@
 module.exports = (app) => {
 
   // user Register
-  app.get('/login', async (req, res) => {
+  app.post('/wxlogin/getcode', async (req, res) => {
     const appid = 'wx09fc8bca51c925c7';
     const redirect_uri = 'https%3A%2F%2yingxitech.com/login';
     const scope = 'snsapi_userinfo';
@@ -23,5 +23,9 @@ module.exports = (app) => {
 
     res.send(responseObj);
   });
+
+  app.get('/login', (req, res) => {
+    res.send('login')
+  })
 
 }
