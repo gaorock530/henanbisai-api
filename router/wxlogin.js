@@ -60,8 +60,12 @@ module.exports = (app) => {
     const more_info = `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${api_token}&openid=${openid}&lang=zh_CN`;
     const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
     try {
-      const info_response = await axios.get(more_info); 
-      console.log(info_response.data);
+      const more_response = await axios.get(more_info); 
+      console.log(more_response.data);
+      if (more_response.data.subscribe === 0) {
+        const info_response = await axios.get(info_url); 
+        console.log(info_response.data);
+      }
 
     }catch(e) {
       console.log(e);
