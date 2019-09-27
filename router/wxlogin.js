@@ -71,7 +71,7 @@ module.exports = (app) => {
 
       // User subscribed
       if (more_response.data.subscribe === 1) {
-        subscribe = true;
+        subscribe = 1;
         openid = more_response.data.openid;
         nickname = more_response.data.nickname;
         pic = more_response.data.headimgurl;
@@ -81,7 +81,7 @@ module.exports = (app) => {
         wx_country = more_response.data.country;
         wx_subscribe_scene = more_response.data.subscribe_scene;
       } else {
-        subscribe = false;
+        subscribe = 0;
         const info_response = await axios.get(info_url); 
         openid = info_response.data.openid;
         nickname = info_response.data.nickname;
