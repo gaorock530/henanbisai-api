@@ -122,8 +122,8 @@ module.exports = (app) => {
 
 
 
-    const redirect_url = encodeURIComponent(`https://yingxitech.com/baoming?nickname=${nickname}&pic=${pic}`);
-    
+    const redirect_url = `https://yingxitech.com/baoming?nickname=${nickname}&pic=${pic}`;
+
     res.redirect(redirect_url);
   });
 
