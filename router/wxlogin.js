@@ -11,7 +11,7 @@ module.exports = (app) => {
     // const url = `https://open.weixin.qq.com/connect/qrconnect?appid=${appid}&redirect_uri=${redirect_uri}&response_type=code&scope=${scope}&state=${state}#wechat_redirect`;
     const url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirect_uri}&response_type=code&scope=${scope}&state=${state}#wechat_redirect`;
 
-    let responseObj = {res: "/wxlogin/getcode"};
+    let responseObj = {res: "/wxlogin/getcode", url};
     try {
       const response = await axios.get(url);
       console.log('Success:', response);
