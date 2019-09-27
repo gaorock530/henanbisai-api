@@ -122,7 +122,9 @@ module.exports = (app) => {
 
 
 
-    res.redirect('https://yingxitech.com/baoming');
+    const redirect_url = encodeURIComponent(`https://yingxitech.com/baoming?nickname=${nickname}&pic=${pic}`);
+    
+    res.redirect(redirect_url);
   });
 
   app.get('/login', (req, res) => {
