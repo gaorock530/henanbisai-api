@@ -20,7 +20,7 @@ module.exports = (app) => {
       console.error('Error:', error);
     }
 
-    res.send(responseObj);
+    res.send('post:/wxlogin/getcode');
   });
 
   app.get('/login', (req, res) => {
