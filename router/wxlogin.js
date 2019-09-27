@@ -47,7 +47,8 @@ module.exports = (app) => {
 
     // Step 4
     // get User_info through openid
-    const more_info = `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
+    const token = await getAccessToken();
+    const more_info = `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${token}&openid=${openid}&lang=zh_CN`;
     const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
     try {
       const info_response = await axios.get(more_info); 
@@ -66,6 +67,43 @@ module.exports = (app) => {
     res.send('login');
   })
 
+}
+
+async function getAccessToken () {
+  try {
+    const tokenString = fs.readFileSync(path.join(__dirname, '..', 'json', 'accessToken.json'));
+    const token = JSON.parse(tokenString);
+    if (Date.now() >= token.expires_time) {
+      const tokenObj = await requireAccessToken();
+      const res = updateAccessToken(tokenObj);
+      if (res) return res;
+    }
+    return token.access_token;
+  }catch(e) {
+    const tokenObj = await requireAccessToken();
+    const res = updateAccessToken(tokenObj);
+    if (res) return res;
+  } 
+}
+
+async function requireAccessToken () {
+  const appid = 'wx09fc8bca51c925c7';
+  const appsecret = '71372b2b8883842e519485e0da99432d';
+  const url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${appid}&secret=${appsecret}`;
+  const res = await axios.get(url);
+  return res.data;
+}
+
+function updateAccessToken (token) {
+  token.expires_time = Date.now() + 7000000;
+  const tokenJson = JSON.stringify(token);
+
+  try {
+    fs.writeFileSync(path.join(__dirname, '..', 'json', 'accessToken.json'), tokenJson);
+    return token.access_token;
+  }catch(e) {
+    return undefined;
+  }
 }
 
 // function updateAccessToken (token) {
