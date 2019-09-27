@@ -11,9 +11,7 @@ module.exports = (app) => {
 
     let responseObj;
     try {
-      const response = await axios.post(url, {
-        headers: {'Access-Control-Allow-Origin': '*'}
-      });
+      const response = await axios.get(url);
       console.log('Success:', response);
       responseObj = response;
     } catch (error) {
