@@ -50,6 +50,7 @@ module.exports = (app) => {
     let api_token;
     try {
       api_token = await getAccessToken();
+      console.log(api_token);
     } catch (e) {
       console.log(e);
     }
