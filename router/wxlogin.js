@@ -78,8 +78,9 @@ module.exports = (app) => {
 
 async function getAccessToken () {
   try {
-    console.log('log: ', 'have accessToken.json');
+    
     const tokenString = fs.readFileSync(path.join(__dirname, '..', 'json', 'accessToken.json'));
+    console.log('log: ', 'have accessToken.json');
     const token = JSON.parse(tokenString);
     if (Date.now() >= token.expires_time) {
       const tokenObj = await requireAccessToken();
@@ -114,6 +115,7 @@ function updateAccessToken (token) {
     fs.writeFileSync(path.join(__dirname, '..', 'json', 'accessToken.json'), tokenJson);
     return token.access_token;
   }catch(e) {
+    console.log(e)
     return undefined;
   }
 }
