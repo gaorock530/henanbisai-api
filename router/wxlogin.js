@@ -78,6 +78,7 @@ module.exports = (app) => {
 
 async function getAccessToken () {
   try {
+    console.log('log: ', 'have accessToken.json');
     const tokenString = fs.readFileSync(path.join(__dirname, '..', 'json', 'accessToken.json'));
     const token = JSON.parse(tokenString);
     if (Date.now() >= token.expires_time) {
@@ -87,6 +88,7 @@ async function getAccessToken () {
     }
     return token.access_token;
   }catch(e) {
+    console.log('log: ', 'Don\'t have accessToken.json');
     const tokenObj = await requireAccessToken();
     const res = updateAccessToken(tokenObj);
     if (res) return res;
@@ -94,14 +96,17 @@ async function getAccessToken () {
 }
 
 async function requireAccessToken () {
+  console.log('log: ', 'requireAccessToken');
   const appid = 'wx09fc8bca51c925c7';
   const appsecret = '71372b2b8883842e519485e0da99432d';
   const url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${appid}&secret=${appsecret}`;
   const res = await axios.get(url);
+  console.log(res.data);
   return res.data;
 }
 
 function updateAccessToken (token) {
+  console.log('log: ', 'updateAccessToken');
   token.expires_time = Date.now() + 7000000;
   const tokenJson = JSON.stringify(token);
 
