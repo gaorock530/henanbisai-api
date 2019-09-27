@@ -16,7 +16,7 @@ module.exports = (app) => {
 
     let responseObj = {res: "/wxlogin", domin: 'api.yingxitech.com'};
     console.log(responseObj);
-    console.log(req.originalUrl);
+    console.log(req.query);
 
     res.redirect('https://yingxitech.com/baoming');
   });
