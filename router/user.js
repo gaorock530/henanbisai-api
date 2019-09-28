@@ -15,7 +15,7 @@ module.exports = (app) => {
     const agent = useragent.parse(req.headers['user-agent']);
     const client = agent.os.toString() + '&' + agent.device.toString() + '&' + agent.toAgent();
     const ip = getClientIP(req);
-    let user;
+    let user, token;
     if (req.body.token) {
       // token
       console.log('via token')
@@ -24,6 +24,8 @@ module.exports = (app) => {
       // openid
       console.log('via openid')
       user = await USER.findOne({openid: req.body.openid});
+      token = await user.generateAuthToken(ip, client, 60*24*7);
+      user.token = token;
     } else {
       console.log('no req.body', req.body)
     }
