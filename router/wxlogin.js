@@ -16,7 +16,7 @@ module.exports = (app) => {
     // encodeURIComponent('https://api.yingxitech.com/wxlogin?type=baoming');
     // https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx09fc8bca51c925c7&redirect_uri=https%3A%2F%2Fapi.yingxitech.com%2Fwxlogin%3Ftype%3Dbaoming&response_type=code&scope=snsapi_userinfo&state=baoming#wechat_redirect
     
-
+    
     // Step 2
     // from Callback url get Code
     let responseObj = {res: "/wxlogin", domin: 'api.yingxitech.com'};
@@ -49,6 +49,18 @@ module.exports = (app) => {
       console.log(e);
       return res.send('发生错误，请关闭本页面，重新进入！{token}');
     }
+
+    // Step 3.1
+    // get User
+    let user;
+    try {
+      user = await USER.findOne({openid});
+      console.log(user);
+    }catch(e) {
+      console.log(e);
+    }
+
+
 
     // Step 4
     // get User_info through openid
@@ -101,25 +113,28 @@ module.exports = (app) => {
     const agent = useragent.parse(req.headers['user-agent']);
     const ip = getClientIP(req);
 
-    const user = new USER({
-      openid,
-      nickname,
-      pic,
-      sex,
-      wx_province,
-      wx_city,
-      wx_country,
-      wx_subscribe_scene,
-      registerDetails: {ip, client: agent.os.toString() + ' ' + agent.device.toString()},
-      lastVisit: {ip, client: agent.os.toString() + ' ' + agent.device.toString()}
-    });
-    
-    try {
-      // user.save();
-      console.log(user);
-    } catch(e) {
-      console.log(e);
+    if (!user) {
+      user = new USER({
+        openid,
+        nickname,
+        pic,
+        sex,
+        wx_province,
+        wx_city,
+        wx_country,
+        wx_subscribe_scene,
+        registerDetails: {ip, client: agent.os.toString() + ' ' + agent.device.toString()},
+        lastVisit: {ip, client: agent.os.toString() + ' ' + agent.device.toString()}
+      });
+      
+      try {
+        // user.save();
+        console.log(user);
+      } catch(e) {
+        console.log(e);
+      }
     }
+    
 
 
 
