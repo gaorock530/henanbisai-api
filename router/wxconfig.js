@@ -91,7 +91,7 @@ async function requireJsapiTicket (token) {
 function updateJsapiTicket (ticket) {
   const ticketObj = {
     ticket: ticket,
-    expires: ConvertUTCTimeToLocalTime(true, false, 1);
+    expires: ConvertUTCTimeToLocalTime(true, false, 1)
   }
   const ticketJson = JSON.stringify(ticketObj);
 
