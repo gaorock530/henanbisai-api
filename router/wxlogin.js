@@ -151,11 +151,6 @@ module.exports = (app) => {
     res.redirect(redirect_url);
   });
 
-  app.get('/login', (req, res) => {
-    console.log(req.params)
-    res.send('login');
-  })
-
 }
 
 
