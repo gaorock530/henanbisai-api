@@ -130,7 +130,7 @@ module.exports = (app) => {
       
       try {
         user_token = await user.generateAuthToken(ip, client, 60 * 24 *7);
-        console.log(user_save);
+        console.log(user_token);
       } catch(e) {
         console.log(e);
       }
