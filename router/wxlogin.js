@@ -19,8 +19,6 @@ module.exports = (app) => {
     
     // Step 2
     // from Callback url get Code
-    let responseObj = {res: "/wxlogin", domin: 'api.yingxitech.com'};
-    console.log(responseObj);
     console.log(req.query);
     if (!req.query.code) {
       res.send('发生错误，请关闭本页面，重新进入！{code}');
@@ -111,8 +109,10 @@ module.exports = (app) => {
     // write / update Database
 
     const agent = useragent.parse(req.headers['user-agent']);
+    const client = agent.os.toString() + '&' + agent.device.toString() + '&' + agent.toAgent();
     const ip = getClientIP(req);
 
+    let user_token;
     if (!user) {
       user = new USER({
         openid,
@@ -123,12 +123,12 @@ module.exports = (app) => {
         wx_city,
         wx_country,
         wx_subscribe_scene,
-        registerDetails: {ip, client: agent.os.toString() + ' ' + agent.device.toString()},
-        lastVisit: {ip, client: agent.os.toString() + ' ' + agent.device.toString()}
+        registerDetails: {ip, client},
+        lastVisit: {ip, client}
       });
       
       try {
-        const user_save = await user.save();
+        user_token = await user.generateAuthToken(ip, client, 60 * 24 *7);
         console.log(user_save);
       } catch(e) {
         console.log(e);
@@ -137,7 +137,8 @@ module.exports = (app) => {
       const user_update = await user.updateOne({
         nickname,
         pic,
-        lastVisit: {ip, client: agent.os.toString() + ' ' + agent.device.toString()}
+        { $inc: { visit_times: 1 } }
+        lastVisit: {ip, client}
       });
       console.log(user_update);
     }
@@ -146,7 +147,7 @@ module.exports = (app) => {
 
 
 
-    const redirect_url = `https://yingxitech.com/baoming?nickname=${nickname}&pic=${pic}&subscribe=${subscribe}`;
+    const redirect_url = `https://yingxitech.com/baoming?nickname=${nickname}&pic=${pic}&subscribe=${subscribe}&token=${user_token}`;
 
     res.redirect(redirect_url);
   });
