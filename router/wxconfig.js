@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const sha1 = require('sha1');
+const ConvertUTCTimeToLocalTime = require('../helper/timezone');
 
 
 
@@ -53,7 +54,7 @@ async function requireAccessToken () {
 }
 
 function updateAccessToken (token) {
-  token.expires_time = Date.now() + 7000000;
+  token.expires_time = ConvertUTCTimeToLocalTime(true, false, 1);
   const tokenJson = JSON.stringify(token);
 
   try {
@@ -90,7 +91,7 @@ async function requireJsapiTicket (token) {
 function updateJsapiTicket (ticket) {
   const ticketObj = {
     ticket: ticket,
-    expires: Date.now() + 7000000
+    expires: ConvertUTCTimeToLocalTime(true, false, 1);
   }
   const ticketJson = JSON.stringify(ticketObj);
 
