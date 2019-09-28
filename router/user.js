@@ -18,12 +18,14 @@ module.exports = (app) => {
     let user;
     if (req.body.token) {
       // token
+      console.log('via token')
       user = await USER.verifyToken(req.body.token, ip, client);
     } else if (req.body.openid) {
       // openid
+      console.log('via openid')
       user = await USER.findOne({openid: req.body.openid});
     } else {
-
+      console.log('no req.body', req.body)
     }
     console.log(user);
     if (!user) return res.json({user: null});
