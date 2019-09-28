@@ -32,7 +32,7 @@ async function getAccessToken () {
   try {
     const tokenString = fs.readFileSync(path.join(__dirname, '..', 'json', 'accessToken.json'));
     const token = JSON.parse(tokenString);
-    if (Date.now() >= token.expires_time) {
+    if (ConvertUTCTimeToLocalTime(true) >= token.expires_time) {
       const tokenObj = await requireAccessToken();
       const res = updateAccessToken(tokenObj);
       if (res) return res;
@@ -69,7 +69,7 @@ async function getJsapiTicket (token) {
   try {
     const ticketString = fs.readFileSync(path.join(__dirname, '..', 'json', 'jsapiTicket.json'));
     const ticket = JSON.parse(ticketString);
-    if (Date.now() >= ticket.expires_time) {
+    if (ConvertUTCTimeToLocalTime(true)  >= ticket.expires_time) {
       const ticketString = await requireJsapiTicket(token);
       const res = updateJsapiTicket(ticketString);
       if (res) return res;
