@@ -3,6 +3,8 @@ const path = require('path');
 const axios = require('axios');
 const sha1 = require('sha1');
 
+
+
 module.exports = (app) => {
   app.post('/wxconfig', async (req, res) => {
     const token = await getAccessToken();
@@ -12,9 +14,7 @@ module.exports = (app) => {
   
     const signature = getSignature(ticket, noncestr, timestamp, req.body.url);
     res.json({
-      signature, 
-      timestamp,
-      noncestr,
+      signature
     });
   })
 }
