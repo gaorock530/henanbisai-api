@@ -54,7 +54,7 @@ async function requireAccessToken () {
 }
 
 function updateAccessToken (token) {
-  token.expires_time = ConvertUTCTimeToLocalTime(true, false, 1);
+  token.expires_time = ConvertUTCTimeToLocalTime(true, false, 7000);
   const tokenJson = JSON.stringify(token);
 
   try {
@@ -91,7 +91,7 @@ async function requireJsapiTicket (token) {
 function updateJsapiTicket (ticket) {
   const ticketObj = {
     ticket: ticket,
-    expires: ConvertUTCTimeToLocalTime(true, false, 1)
+    expires_time: ConvertUTCTimeToLocalTime(true, false, 7000)
   }
   const ticketJson = JSON.stringify(ticketObj);
 
