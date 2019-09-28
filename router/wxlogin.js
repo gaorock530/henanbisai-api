@@ -139,7 +139,7 @@ module.exports = (app) => {
         nickname,
         pic,
         $inc: { visit_times: 1 },
-        lastVisit: {ip, client}
+        lastVisit: {ip, client, time: ConvertUTCTimeToLocalTime(true)}
       });
       console.log(user_update);
     }
