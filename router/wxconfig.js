@@ -16,6 +16,7 @@ module.exports = (app) => {
     const noncestr = req.body.noncestr;
     console.log('timestamp:', timestamp);
     console.log('noncestr:', noncestr);
+    console.log(req.body);
   
     const signature = getSignature(ticket, noncestr, timestamp, req.body.url);
     console.log('signature:', signature);
