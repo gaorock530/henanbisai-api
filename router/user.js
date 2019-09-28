@@ -11,6 +11,7 @@ module.exports = (app) => {
 
   // user Login
   app.post('/login', async (req, res) => {
+    console.log('POST: /login')
     const agent = useragent.parse(req.headers['user-agent']);
     const client = agent.os.toString() + '&' + agent.device.toString() + '&' + agent.toAgent();
     const ip = getClientIP(req);
@@ -24,7 +25,7 @@ module.exports = (app) => {
     } else {
 
     }
-
+    console.log(user);
     if (!user) return res.json({user: null});
     
     res.json(user)
@@ -42,9 +43,11 @@ module.exports = (app) => {
 
   // Get User
   app.post('/user', async (req, res) => {
+    console.log('POST: /user')
     // req.body.openid
     if (!req.body.openid) return res.json({user: null});
     const user = await USER.findOne({openid: req.body.openid});
+    console.log(user)
     res.json(user)
   })
 }
