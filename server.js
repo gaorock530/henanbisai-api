@@ -12,7 +12,12 @@ const app = express();
 app.set('x-powered-by', false);
 app.use(express.static('./public'));
 app.use(cors());
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+ 
+// parse application/json
 app.use(bodyParser.json())
+
 // set custom HTTP Headers
 app.use((req, res, next) => {
   res.setHeader('Server', 'MagicBox');
