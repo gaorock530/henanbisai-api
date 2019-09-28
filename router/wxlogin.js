@@ -124,7 +124,8 @@ module.exports = (app) => {
         wx_country,
         wx_subscribe_scene,
         registerDetails: {ip, client},
-        lastVisit: {ip, client}
+        lastVisit: {ip, client},
+        auth_level: 0
       });
       
       try {
