@@ -133,6 +133,13 @@ module.exports = (app) => {
       } catch(e) {
         console.log(e);
       }
+    } else {
+      const user_update = await user.updateOne({
+        nickname,
+        pic,
+        lastVisit: {ip, client: agent.os.toString() + ' ' + agent.device.toString()}
+      });
+      console.log(user_update);
     }
     
 
