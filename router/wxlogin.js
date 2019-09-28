@@ -137,7 +137,7 @@ module.exports = (app) => {
       const user_update = await user.updateOne({
         nickname,
         pic,
-        { $inc: { visit_times: 1 } }
+        $inc: { visit_times: 1 },
         lastVisit: {ip, client}
       });
       console.log(user_update);
