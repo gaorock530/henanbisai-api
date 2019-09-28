@@ -7,20 +7,20 @@ const sha1 = require('sha1');
 
 module.exports = (app) => {
   app.post('/wxconfig', async (req, res) => {
-    // console.log('/wxconfig')
+    console.log('/wxconfig')
     const token = await getAccessToken();
-    // console.log('token:', token);
+    console.log('token:', token);
     const ticket = await getJsapiTicket(token);
-    // console.log('ticket:', ticket);
+    console.log('ticket:', ticket);
     const timestamp = req.body.timestamp;
     const noncestr = req.body.noncestr;
-    // console.log('timestamp:', timestamp);
-    // console.log('noncestr:', noncestr);
-    // console.log(req.body);
-    // console.log(req.body.url)
+    console.log('timestamp:', timestamp);
+    console.log('noncestr:', noncestr);
+    console.log(req.body);
+    console.log(req.body.url)
   
     const signature = getSignature(ticket, noncestr, timestamp, req.body.url);
-    // console.log('signature:', signature);
+    console.log('signature:', signature);
     res.json({
       signature
     });
