@@ -52,6 +52,7 @@ module.exports = (app) => {
     if (!req.body.openid) return res.json({user: null});
     const user = await USER.findOne({openid: req.body.openid});
     console.log(user)
+    if (!user) return res.json({user: null});
     res.json(user)
   })
 }
