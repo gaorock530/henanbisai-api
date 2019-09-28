@@ -128,8 +128,8 @@ module.exports = (app) => {
       });
       
       try {
-        // user.save();
-        console.log(user);
+        const user_save = await user.save();
+        console.log(user_save);
       } catch(e) {
         console.log(e);
       }
