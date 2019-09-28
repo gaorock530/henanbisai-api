@@ -125,8 +125,6 @@ const schema = new mongoose.Schema({
   -------------------------------------------------*/   
   tokens: [
     {
-      loginTime: { type: Date, defalut: ConvertUTCTimeToLocalTime(true)},
-      location: {type: String, defalut: ''},
       access: { type: String, required: true },
       token: { type: String, required: true },
       expires: { type: Date, required: true }
@@ -159,7 +157,6 @@ schema.methods.generateAuthToken = function (ip, client, expires) {
 
   // push Token with something into user Tokens Array
   user.tokens.push({
-    loginTime: ConvertUTCTimeToLocalTime(true),
     access, 
     token, 
     expires
