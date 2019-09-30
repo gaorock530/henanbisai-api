@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const cuid = require('cuid');
-const bcrypt = require('bcryptjs');
+// const cuid = require('cuid');
+// const bcrypt = require('bcryptjs');
 const {hex_md5} = require('../helper/md5');
 const {b64_sha256} = require('../helper/sha256');
-const {checkPass} = require('../helper/utils');
+// const {checkPass} = require('../helper/utils');
 const _ = require('lodash');
 const ConvertUTCTimeToLocalTime = require('../helper/timezone');
 
@@ -29,22 +29,6 @@ const schema = new mongoose.Schema({
   wx_country: { type: String, default: '' },
   wx_subscribe_scene: { type: String, default: '' },
 
-
-  baoming: { type: Boolean, default: false},
-  baoming_type: { type: Number }, // 0 - indevidual, 1 - institution, 2 - school, 3 - organization
-  baoming_fee: { type: Number }, // actual fees is paid
-  baoming_brand: { type: String}, // name of institution/school/organization
-  baoming_location_state: {type: String},
-  baoming_location_city: {type: String},
-  baoming_location_sub: {type: String},
-
-
-  bisai_type: { type: Number }, // 0 - beijing, 1 - shanghai
-  bisai_cate: { type: Number }, // 0 - 舞蹈, 1 - 声乐, 2 - 乐器, 3 - 表演, 4 - 语言, 5 - 书画
-  bisai_single: { type: Boolean}, // true - single, false - group
-  bisai_status: { type: Number, default: 0}, // 0 - idle, 1 - ready(payed), 2 - passed1, 3 - passed2, 4 - absent
-  bisai_comment: { type: String},
-
   visit_times: {type: Number, defalut: 0},
 /*-----------------------------------------------
     Auth feilds
@@ -57,11 +41,6 @@ const schema = new mongoose.Schema({
   age: {type: Number},
   email: { type: String, defalut: '', lowercase: true, trim: true },
   phone: { type: String, defalut: '', trim: true},
-
-  guardian_needed: {type: Boolean},
-  guardian_name: {type: String},
-  guardian_phone: {type: String},
-  guardian_relation: {type: Number}, // 0 - mother, 1 - father, 2 - teacher
   
   /*-----------------------------------------------
     System feilds

@@ -40,4 +40,6 @@ require('./router/wxlogin')(app);
 require('./router/code')(app);
 require('./router/map')(app);
 
+require('./router/baoming')(app);
+
 

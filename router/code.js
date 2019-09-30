@@ -68,6 +68,8 @@ module.exports = (app) => {
     const phone = String(req.body.phone);
     const code = String(req.body.code);
 
+    console.log(req.body)
+
     try {
       const savedCode = await CODE.findOne({openid});
       // check openid/phone
@@ -77,7 +79,7 @@ module.exports = (app) => {
 
         //check code
         if (code === savedCode.code && phone === savedCode.phone) {
-          return res.end();
+          return res.end('ok');
         } else {
           return res.json({err: 'invalid code.'});
         }
