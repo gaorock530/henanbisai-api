@@ -74,13 +74,17 @@ module.exports = (app) => {
       console.log(e);
       res.json({err: JSON.stringify(e)});  
     }
+  });
+
+  // app.post('/pay/bisai_paid', (req, res) => {
     
+  // })
 
-      
+  // app.post('pay/juesai_paid', (req, res) => {
 
-  })
+  // })
 
-  app.post('/pay/resultAsync', bodyParser.text(), async (req, res) => {
+  app.post('/pay/resultAsync', async (req, res) => {
     const responseString = `<xml>
     <return_code><![CDATA[SUCCESS]]></return_code>
     <return_msg><![CDATA[OK]]></return_msg>

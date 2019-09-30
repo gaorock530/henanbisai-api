@@ -26,8 +26,11 @@ const schema = new mongoose.Schema({
   baoming_groupType: {type: Number, required: true},
   baoming_groupName: {type: String},
 
-  bisai_status: { type: Number, default: 0}, // 0 - idle, 1 - ready(payed), 2 - passed1, 3 - passed2, 4 - absent
+
   bisai_comment: { type: String, default: ''},
+  bisai_paid: {type: Boolean, default: false},
+
+  juesai_paid: {type: Boolean, default: false}
 
 });
 
