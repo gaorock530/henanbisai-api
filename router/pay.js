@@ -13,7 +13,7 @@ module.exports = (app) => {
 
   app.post('/pay/request', async (req, res) => {
     const openid = req.body.openid;
-    // if (!openid) return res.json({err: 'invalid request.'});
+    if (!openid) return res.json({err: 'invalid request.'});
 
 
 
@@ -92,6 +92,11 @@ module.exports = (app) => {
 
   app.post('/pay/resultApi', async (req, res) => {
     res.send('/pay/resultApi')
+  });
+
+
+  app.get('/pay/payscan_callback', (req, res) => {
+    res.send('/pay/payscan_callback')
   })
 }
 
