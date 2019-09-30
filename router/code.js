@@ -69,14 +69,14 @@ module.exports = (app) => {
     const code = String(req.body.code);
 
     try {
-      const savedCode = await CODE.findOne({openid, phone});
+      const savedCode = await CODE.findOne({openid});
       // check openid/phone
       if (!savedCode) return res.json({err: 'invalid phone/id.'});
       // check expire time
       if (ConvertUTCTimeToLocalTime(true) < savedCode.expires) {
 
         //check code
-        if (code === savedCode.code) {
+        if (code === savedCode.code && phone === savedCode.phone) {
           return res.end();
         } else {
           return res.json({err: 'invalid code.'});
