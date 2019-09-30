@@ -54,7 +54,7 @@ module.exports = (app) => {
 
       if (returnJson.xml.return_code._cdata === 'SUCCESS') {
         const payObj = {
-          "appId": 'wx09fc8bca51c925c7',     //公众号名称，由商户传入     
+          // "appId": 'wx09fc8bca51c925c7',     //公众号名称，由商户传入     
           "nonceStr": cuid(), //随机串   
           "package": `prepay_id=${returnJson.xml.prepay_id._cdata}`,   
           "signType": "MD5",         //微信签名方式：  
