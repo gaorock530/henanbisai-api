@@ -24,7 +24,7 @@ module.exports = (app) => {
       mch_id: '1557060081',
       nonce_str: cuid(),
       notify_url: 'https://api.yingxitech.com/pay/resultAsync',
-      openid: 'oGCPOwwKLIZNVOa8TOqUOsdbDpLs', // 'oGCPOwwKLIZNVOa8TOqUOsdbDpLs'
+      openid: openid, // 'oGCPOwwKLIZNVOa8TOqUOsdbDpLs'
       out_trade_no: cuid(),
       spbill_create_ip: '42.226.30.38',
       total_fee: 1,
