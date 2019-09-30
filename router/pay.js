@@ -4,7 +4,7 @@ const axios = require('axios');
 const cuid = require('cuid');
 const {hex_md5} = require('../helper/md5');
 const convert = require('xml-js');
-const bodyParser = require('body-parser');
+const xmlparser = require('express-xml-bodyparser');
 const ConvertUTCTimeToLocalTime = require('../helper/timezone');
 
 
@@ -84,7 +84,7 @@ module.exports = (app) => {
 
   // })
 
-  app.post('/pay/resultAsync', async (req, res) => {
+  app.post('/pay/resultAsync', xmlparser(), async (req, res) => {
     const responseString = `<xml>
     <return_code><![CDATA[SUCCESS]]></return_code>
     <return_msg><![CDATA[OK]]></return_msg>
