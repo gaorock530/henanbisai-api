@@ -16,7 +16,7 @@ module.exports = async function (id, number, code) {
       "10"
     ],
     "sig": sig,
-    // "sign": "魔法水族",
+    "sign": "中原青少年艺术赛事网",
     "tel": {
         "mobile": strMobile,
         "nationcode": "86"
