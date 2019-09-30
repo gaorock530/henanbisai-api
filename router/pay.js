@@ -85,8 +85,8 @@ module.exports = (app) => {
     <return_code><![CDATA[SUCCESS]]></return_code>
     <return_msg><![CDATA[OK]]></return_msg>
   </xml>`;
-
-
+    console.log('----------------------------------------')
+    console.log('/pay/resultAsync')
     console.log(req.body)
     res.set('Content-Type', 'text/xml');
     res.send(responseString)
