@@ -19,7 +19,7 @@ module.exports = (app) => {
 
     const json = {
       appid: 'wx09fc8bca51c925c7',
-      body: '影袭科技-报名费',
+      body: '中原青少年艺术赛事网-报名费',
       limit_pay: 'no_credit',
       mch_id: '1557060081',
       nonce_str: cuid(),
