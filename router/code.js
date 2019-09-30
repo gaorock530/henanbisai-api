@@ -79,7 +79,7 @@ module.exports = (app) => {
 
         //check code
         if (code === savedCode.code && phone === savedCode.phone) {
-          return res.end('ok');
+          return res.json({status: 0});
         } else {
           return res.json({err: 'invalid code.'});
         }
