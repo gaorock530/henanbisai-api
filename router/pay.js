@@ -84,7 +84,7 @@ module.exports = (app) => {
 
   // })
 
-  app.post('/pay/resultAsync', xmlparser(), async (req, res) => {
+  app.post('/pay/resultAsync', xmlparser({explicitArray: true}), async (req, res) => {
     const responseString = `<xml>
     <return_code><![CDATA[SUCCESS]]></return_code>
     <return_msg><![CDATA[OK]]></return_msg>
