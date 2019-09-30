@@ -53,12 +53,14 @@ module.exports = (app) => {
       const returnJson = convert.xml2js(sendRequest.data, optionsJs);
 
       if (returnJson.xml.return_code._cdata === 'SUCCESS') {
+
+        console.log('prepay_id='+returnJson.xml.prepay_id._cdata);
         const payObj = {
           "appId": 'wx09fc8bca51c925c7',     //公众号名称，由商户传入     
           "nonceStr": cuid(), //随机串   
           "package": `prepay_id=${returnJson.xml.prepay_id._cdata}`,   
           "signType": "MD5",         //微信签名方式：  
-          "timeStamp": String(Math.floor(ConvertUTCTimeToLocalTime(true) / 1000)),         //时间戳，自1970年以来的秒数     
+          "timestamp": String(Math.floor(ConvertUTCTimeToLocalTime(true) / 1000)),         //时间戳，自1970年以来的秒数     
         }
         const paySignString = getSign(payObj);
         payObj["paySign"] = paySignString;
@@ -103,7 +105,12 @@ module.exports = (app) => {
 function getSign (json) {
   let stringArr = [];
   for(let key in json) {
-    stringArr.push(`${key}=${json[key]}`)
+    if (key === 'timestamp') {
+      stringArr.push(`timeStamp=${json[key]}`)
+    }else {
+      stringArr.push(`${key}=${json[key]}`)
+    }
+    
   }
   const stringO = stringArr.join('&');
   
