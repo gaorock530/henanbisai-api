@@ -14,7 +14,11 @@ module.exports = (app) => {
 
   app.post('/pay/request', async (req, res) => {
     const openid = req.body.openid;
-    if (!openid) return res.json({err: 'invalid request.'});
+    if (!openid) {
+      console.log('on id!')  
+      return res.json({err: 'invalid request.'});
+    
+    }
 
 
 
