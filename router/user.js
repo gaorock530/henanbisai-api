@@ -30,7 +30,7 @@ module.exports = (app) => {
       console.log('no req.body', req.body)
     }
     console.log(user);
-    if (!user) return res.json({user: null});
+    if (!user) return res.json({err: 'null'});
     
     res.json(user)
   })
