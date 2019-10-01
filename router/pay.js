@@ -6,6 +6,7 @@ const {hex_md5} = require('../helper/md5');
 const convert = require('xml-js');
 const xmlparser = require('express-xml-bodyparser');
 const ConvertUTCTimeToLocalTime = require('../helper/timezone');
+const RACE = require('../models/race');
 
 
 
@@ -84,14 +85,29 @@ module.exports = (app) => {
 
   // })
 
-  app.post('/pay/resultAsync', xmlparser({explicitArray: true}), async (req, res) => {
+  app.post('/pay/resultAsync', xmlparser(), async (req, res) => {
     const responseString = `<xml>
     <return_code><![CDATA[SUCCESS]]></return_code>
     <return_msg><![CDATA[OK]]></return_msg>
   </xml>`;
     console.log('----------------------------------------')
     console.log('/pay/resultAsync')
-    console.log(req.body)
+    console.log(req.body.xml)
+
+    const {result_code ,return_code} = req.body.xml;
+    if (result_code[0] === 'SUCCESS' && return_code[0] === 'SUCCESS') {
+      const {appid ,mch_id, openid, total_fee, out_trade_no, transaction_id} = req.body.xml;
+      const fee = String(1); //50000
+      if (appid[0] === 'wx09fc8bca51c925c7' && mch_id[0] === '1557060081' && total_fee[0] === fee) {
+        try {
+          const updateRace = await RACE.findOneAndUpdate({openid}, {bisai_out_trade_no: out_trade_no, bisai_transaction_id: transaction_id});
+          console.log(updateRace)
+        }catch(e) {
+          console.log(e);
+        }
+      }
+    }
+
     res.set('Content-Type', 'text/xml');
     res.send(responseString)
   })
@@ -105,6 +121,28 @@ module.exports = (app) => {
     res.send('/pay/payscan_callback')
   })
 }
+
+/**
+ * 
+ * @param {{ 
+  xml: 
+   { appid: [ 'wx09fc8bca51c925c7' ],
+     bank_type: [ 'CFT' ],
+     cash_fee: [ '1' ],
+     fee_type: [ 'CNY' ],
+     is_subscribe: [ 'Y' ],
+     mch_id: [ '1557060081' ],
+     nonce_str: [ 'ck1726cvz0000t3va9z1s37ll' ],
+     openid: [ 'oGCPOwwKLIZNVOa8TOqUOsdbDpLs' ],
+     out_trade_no: [ 'ck1726cvz0001t3va6s7w211c' ],
+     result_code: [ 'SUCCESS' ],
+     return_code: [ 'SUCCESS' ],
+     sign: [ 'E903FBFD3FCBDDBB9B3DC19A47B81A2D' ],
+     time_end: [ '20191001074307' ],
+     total_fee: [ '1' ],
+     trade_type: [ 'JSAPI' ],
+     transaction_id: [ '4200000400201910018651053418' ] } }} json 
+ */
 
 function getSign (json) {
   let stringArr = [];

@@ -28,9 +28,14 @@ const schema = new mongoose.Schema({
 
 
   bisai_comment: { type: String, default: ''},
+  
+  bisai_transaction_id: {type: String},
+  bisai_out_trade_no: {type: String},
   bisai_paid: {type: Boolean, default: false},
 
-  juesai_paid: {type: Boolean, default: false}
+  juesai_transaction_id: {type: String},
+  juesai_out_trade_no: {type: String},
+  juesai_paid: {type: Boolean, default: false},
 
 });
 
