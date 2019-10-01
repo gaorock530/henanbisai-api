@@ -36,6 +36,8 @@ module.exports = (app) => {
     const appid = 'wx09fc8bca51c925c7';
     const appsecret = '71372b2b8883842e519485e0da99432d';
     const code = req.query.code;
+    const type = req.query.type;  //baoming, webpage
+    console.log('/wxlogin', 'type='+type)
     const token_url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appid}&secret=${appsecret}&code=${code}&grant_type=authorization_code`;
     try {
       const access_token_response = await axios.get(token_url); 
