@@ -150,7 +150,7 @@ module.exports = (app) => {
 
 
 
-    const redirect_url = `https://yingxitech.com/baoming?nickname=${nickname}&pic=${pic}&subscribe=${subscribe}&openid=${openid}&token=${user_token}`;
+    const redirect_url = `https://yingxitech.com/pay?subscribe=${subscribe}&openid=${openid}&token=${user_token}`;
 
     res.redirect(redirect_url);
   });

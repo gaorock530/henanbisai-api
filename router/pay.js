@@ -32,7 +32,7 @@ module.exports = (app) => {
       openid: openid, // 'oGCPOwwKLIZNVOa8TOqUOsdbDpLs'
       out_trade_no: cuid(),
       spbill_create_ip: '42.226.30.38',
-      total_fee: 1,
+      total_fee: 50000,
       trade_type: 'JSAPI',
     }
 
