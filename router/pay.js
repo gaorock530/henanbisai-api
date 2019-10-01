@@ -104,7 +104,7 @@ module.exports = (app) => {
       const fee = String(1); //50000
       if (appid[0] === 'wx09fc8bca51c925c7' && mch_id[0] === '1557060081' && total_fee[0] === fee) {
         try {
-          const updateRace = await RACE.findOneAndUpdate({openid}, {bisai_out_trade_no: out_trade_no, bisai_transaction_id: transaction_id});
+          const updateRace = await RACE.findOneAndUpdate({openid}, {bisai_paid: true, bisai_out_trade_no: out_trade_no, bisai_transaction_id: transaction_id});
           console.log(updateRace)
         }catch(e) {
           console.log(e);
