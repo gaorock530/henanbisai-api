@@ -163,17 +163,152 @@ module.exports = (app) => {
 
 
 
-    if (type === 'baoming') {
-      const redirect_url = `https://yingxitech.com/pay?subscribe=${subscribe}&openid=${openid}&token=${user_token}`;
-      res.redirect(redirect_url);
-    } else if (type === 'webpage') {
-      const redirect_url = `https://yingxitech.com/bsbackend?subscribe=${subscribe}&openid=${openid}&token=${user_token}`;
-      res.redirect(redirect_url);
-    } else {
-      const redirect_url = `https://yingxitech.com/bsbackend?subscribe=${subscribe}&openid=${openid}&token=${user_token}`;
-      res.redirect(redirect_url);
-    }
+
+    const redirect_url = `https://yingxitech.com/pay?subscribe=${subscribe}&openid=${openid}&token=${user_token}`;
+    res.redirect(redirect_url);
+
   });
+
+
+  app.get('/authlogin/webpage', async (req, res) => {
+    // Step 2
+    // from Callback url get Code
+    console.log(req.query);
+    if (!req.query.code) return res.send('发生错误，请关闭本页面，重新进入！{code}');
+
+
+    // Step 3
+    // get 'access_token' and 'refresh_token'
+
+    let openid;
+    let access_token;
+    const code = req.query.code;
+    const type = req.query.type;  //baoming, webpage
+    const appid = AUTH['webpage'].appid;
+    const appsecret = AUTH['webpage'].appsecret;
+
+    if (!appid) return res.send('发生错误，请关闭本页面，重新进入！{appid}');
+
+    
+
+    const token_url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appid}&secret=${appsecret}&code=${code}&grant_type=authorization_code`;
+    try {
+      const access_token_response = await axios.get(token_url); 
+      if (!access_token_response.data.openid) {
+        return res.send('发生错误，请关闭本页面，重新进入！{openid}');
+      }
+      console.log(access_token_response.data);
+      openid = access_token_response.data.openid;
+      access_token = access_token_response.data.access_token;
+    }catch(e) {
+      console.log(e);
+      return res.send('发生错误，请关闭本页面，重新进入！{token}');
+    }
+
+    // Step 3.1
+    // get User
+    let user;
+    try {
+      user = await USER.findOne({openid});
+      console.log(user);
+    }catch(e) {
+      console.log(e);
+    }
+
+
+
+    // Step 4
+    // get User_info through openid
+    let api_token;
+    try {
+      api_token = await getAccessToken();
+      console.log(api_token);
+    } catch (e) {
+      console.log(e);
+    }
+
+    let subscribe, nickname, pic, sex, wx_province, wx_city, wx_country, wx_subscribe_scene;
+    // subscribed User info - more
+    const more_info = `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${api_token}&openid=${openid}&lang=zh_CN`;
+    // NOT subscribed User info - less
+    const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
+    try {
+      const more_response = await axios.get(more_info); 
+      console.log(more_response.data);
+
+      // User subscribed
+      if (more_response.data.subscribe === 1) {
+        subscribe = 1;
+        openid = more_response.data.openid;
+        nickname = more_response.data.nickname;
+        pic = more_response.data.headimgurl;
+        sex = more_response.data.sex;
+        wx_province = more_response.data.province;
+        wx_city = more_response.data.city;
+        wx_country = more_response.data.country;
+        wx_subscribe_scene = more_response.data.subscribe_scene;
+      } else {
+        subscribe = 0;
+        const info_response = await axios.get(info_url); 
+        openid = info_response.data.openid;
+        nickname = info_response.data.nickname;
+        pic = info_response.data.headimgurl;
+        sex = info_response.data.sex;
+        console.log(info_response.data);
+      }
+
+    }catch(e) {
+      console.log(e);
+      return res.send('发生错误，请关闭本页面，重新进入！{info}');
+    }
+
+    // Step 5
+    // write / update Database
+
+    const agent = useragent.parse(req.headers['user-agent']);
+    const client = agent.os.toString() + '&' + agent.device.toString() + '&' + agent.toAgent();
+    const ip = getClientIP(req);
+
+    let user_token;
+    if (!user) {
+      user = new USER({
+        openid,
+        nickname,
+        pic,
+        sex,
+        wx_province,
+        wx_city,
+        wx_country,
+        wx_subscribe_scene,
+        registerDetails: {ip, client},
+        lastVisit: {ip, client},
+        auth_level: 0
+      });
+      
+      try {
+        user_token = await user.generateAuthToken(ip, client, 60 * 24 *7);
+        console.log(user_token);
+      } catch(e) {
+        console.log(e);
+      }
+    } else {
+      const user_update = await user.updateOne({
+        nickname,
+        pic,
+        $inc: { visit_times: 1 },
+        lastVisit: {ip, client, time: ConvertUTCTimeToLocalTime(true)}
+      });
+      console.log(user_update);
+    }
+    
+
+
+
+   
+    const redirect_url = `https://yingxitech.com/bsbackend?subscribe=${subscribe}&openid=${openid}&token=${user_token}`;
+    res.redirect(redirect_url);
+    
+  })
 
 }
 
