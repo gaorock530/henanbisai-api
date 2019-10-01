@@ -6,6 +6,17 @@ const useragent = require('useragent');
 const ConvertUTCTimeToLocalTime = require('../helper/timezone');
 const getClientIP = require('../helper/ip');
 
+const AUTH = {
+  'baoming': {
+    appid: 'wx09fc8bca51c925c7',
+    appsecret: '71372b2b8883842e519485e0da99432d'
+  },
+  'webpage': {
+    appid: 'wxb751a892b92c78f8',
+    appsecret: 'd3ca6c8048bf345fb3c72f38608e65b1'
+  }
+}
+
 module.exports = (app) => {
 
   app.get('/wxlogin/MP_verify_FdS96m4Og6Nb5Yrw.txt', (req, res) => {
@@ -22,10 +33,7 @@ module.exports = (app) => {
     // Step 2
     // from Callback url get Code
     console.log(req.query);
-    if (!req.query.code) {
-      res.send('发生错误，请关闭本页面，重新进入！{code}');
-      return res.end();
-    }
+    if (!req.query.code) return res.send('发生错误，请关闭本页面，重新进入！{code}');
 
 
     // Step 3
@@ -33,10 +41,14 @@ module.exports = (app) => {
 
     let openid;
     let access_token;
-    const appid = 'wx09fc8bca51c925c7';
-    const appsecret = '71372b2b8883842e519485e0da99432d';
     const code = req.query.code;
     const type = req.query.type;  //baoming, webpage
+    const appid = AUTH[type].appid;
+    const appsecret = AUTH[type].appsecret;
+
+    if (!appid) return res.send('发生错误，请关闭本页面，重新进入！{appid}');
+
+    
 
     const token_url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appid}&secret=${appsecret}&code=${code}&grant_type=authorization_code`;
     try {
