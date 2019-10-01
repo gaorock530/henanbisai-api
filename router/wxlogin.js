@@ -170,7 +170,8 @@ module.exports = (app) => {
       const redirect_url = `https://yingxitech.com/bsbackend?subscribe=${subscribe}&openid=${openid}&token=${user_token}`;
       res.redirect(redirect_url);
     } else {
-      res.end()
+      const redirect_url = `https://yingxitech.com/bsbackend?subscribe=${subscribe}&openid=${openid}&token=${user_token}`;
+      res.redirect(redirect_url);
     }
   });
 
