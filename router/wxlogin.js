@@ -145,6 +145,7 @@ module.exports = (app) => {
 
       } else {
         const user_update = await user.updateOne({
+          unionid,
           openid,
           nickname,
           pic,
