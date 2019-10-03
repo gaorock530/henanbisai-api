@@ -8,8 +8,6 @@ const schema = new mongoose.Schema({
   /*-----------------------------------------------
     Basic feilds
   -------------------------------------------------*/ 
-  baoming: { type: Boolean, default: false},
-  
   baoming_name: { type: String, required: true },
   baoming_sex: { type: Number, required: true }, 
   baoming_age: {type: Number, required: true },

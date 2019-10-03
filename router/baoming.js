@@ -65,14 +65,18 @@ module.exports = (app) => {
     const race = await RACE.findById(user.baoming_id);
 
     if (!race) return res.json({err: 'invaid baoming_id.'}) 
-    console.log('/baoming/verify', race)
-    race.nickname = user.nickname;
-    race.pic = user.pic;
-    race.unionid = user.unionid;
+
+    console.log('/baoming/verify', race);
+    const obj = {
+      ...race,
+      nickname: user.nickname,
+      pic:user.pic,
+      unionid:user.unionid
+    }
     console.log(race)
 
-    if (!race) return res.json({err: 'invaid id.'}) 
+    
 
-    res.json(race)
+    res.json(obj)
   });
 }
