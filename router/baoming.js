@@ -54,12 +54,12 @@ module.exports = (app) => {
     if (!unionid) return res.json({err: 'invaid request.'}) 
 
     const user = await USER.findOne({unionid});
-    console.log('/baoming/verify', user._id)
+    console.log('/baoming/verify', user.baoming_id)
     if (!user) return res.json({err: 'invaid request.'}) 
-    const race = await RACE.findById(user._id);
+    const race = await RACE.findById(user.baoming_id);
     console.log('/baoming/verify', race)
 
-    if (!race) res.json({err: 'invaid id.'}) 
+    if (!race) return res.json({err: 'invaid id.'}) 
 
     res.json(race)
   });
