@@ -24,9 +24,7 @@ module.exports = (app) => {
     try {
       const user = await USER.findOne({unionid});
       if (!user) return res.json({err: 'ivalid user'});
-      // openid = user._doc.openid;
-      console.log(user)
-      console.log(openid);
+      openid = user.openid;
     }catch(e) {
       console.log(e)
       return res.json({err: 'ivalid user'});
