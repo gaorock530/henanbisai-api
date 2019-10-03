@@ -41,7 +41,7 @@ module.exports = (app) => {
 
     let openid;
     let unionid;
-    let access_token;
+    // let access_token;
     const code = req.query.code;
     const type = req.query.type;  //baoming
     const appid = AUTH[type].appid;
@@ -59,14 +59,12 @@ module.exports = (app) => {
       }
       console.log(access_token_response.data);
       openid = access_token_response.data.openid;
+      unionid = access_token_response.data.unionid;
       access_token = access_token_response.data.access_token;
     }catch(e) {
       console.log(e);
       return res.send('发生错误，请关闭本页面，重新进入！{token}');
     }
-
-    
-
 
 
     // Step 4
@@ -83,7 +81,7 @@ module.exports = (app) => {
     // subscribed User info - more
     const more_info = `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${api_token}&openid=${openid}&lang=zh_CN`;
     // NOT subscribed User info - less
-    const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
+    // const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
     try {
       const more_response = await axios.get(more_info); 
       console.log('more_info: ');
@@ -92,21 +90,18 @@ module.exports = (app) => {
       // const info_response = await axios.get(info_url); 
       // console.log('info_response: ');
       // console.log(info_response.data);
-
+      subscribe = more_response.data.subscribe;
       nickname = more_response.data.nickname;
       pic = more_response.data.headimgurl;
       sex = more_response.data.sex;
-      unionid = more_response.data.unionid;
+      unionid = unionid || more_response.data.unionid;
 
       // User subscribed
       if (more_response.data.subscribe === 1) {
-        subscribe = 1;
         wx_province = more_response.data.province;
         wx_city = more_response.data.city;
         wx_country = more_response.data.country;
         wx_subscribe_scene = more_response.data.subscribe_scene;
-      } else {
-        subscribe = 0;
       }
 
     }catch(e) {
@@ -207,7 +202,7 @@ module.exports = (app) => {
       }
       console.log(access_token_response.data);
       openid = access_token_response.data.openid;
-      access_token = access_token_response.data.access_token;
+      // access_token = access_token_response.data.access_token;
     }catch(e) {
       console.log(e);
       return res.send('发生错误，请关闭本页面，重新进入！{token}');
@@ -215,13 +210,13 @@ module.exports = (app) => {
 
     // Step 3.1
     // get User
-    let user;
-    try {
-      user = await USER.findOne({openid});
-      console.log(user);
-    }catch(e) {
-      console.log(e);
-    }
+    // let user;
+    // try {
+    //   user = await USER.findOne({openid});
+    //   console.log(user);
+    // }catch(e) {
+    //   console.log(e);
+    // }
 
 
 
@@ -239,7 +234,7 @@ module.exports = (app) => {
     // subscribed User info - more
     const more_info = `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${api_token}&openid=${openid}&lang=zh_CN`;
     // NOT subscribed User info - less
-    const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
+    // const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
     try {
       const more_response = await axios.get(more_info); 
       console.log(more_response.data);
@@ -247,10 +242,10 @@ module.exports = (app) => {
       nickname = more_response.data.nickname;
       pic = more_response.data.headimgurl;
       sex = more_response.data.sex;
+      subscribe = more_response.data.subscribe;
 
       // User subscribed
       if (more_response.data.subscribe === 1) {
-        subscribe = 1;
         wx_province = more_response.data.province;
         wx_city = more_response.data.city;
         wx_country = more_response.data.country;
@@ -286,7 +281,7 @@ module.exports = (app) => {
       });
       
       try {
-        user_token = await user.generateAuthToken(ip, client, 60 * 24 *7);
+        user_token = await user.generateAuthToken(ip, client, 60 * 24 * 7);
         console.log(user_token);
       } catch(e) {
         console.log(e);
@@ -322,7 +317,7 @@ async function getAccessToken () {
     const tokenString = fs.readFileSync(path.join(__dirname, '..', 'json', 'accessToken.json'));
     console.log('log: ', 'have accessToken.json');
     const token = JSON.parse(tokenString);
-    if (Date.now() >= token.expires_time) {
+    if (ConvertUTCTimeToLocalTime(true) >= token.expires_time) {
       const tokenObj = await requireAccessToken();
       const res = updateAccessToken(tokenObj);
       if (res) return res;
