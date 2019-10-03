@@ -18,7 +18,16 @@ module.exports = (app) => {
     if (!unionid) {
       console.log('on id!')  
       return res.json({err: 'invalid request.'});
-    
+    }
+
+    let openid;
+    try {
+      const user = USER.findOne({unionid});
+      if (!user) return res.json({err: 'ivalid user'});
+      openid = user.openid;
+    }catch(e) {
+      console.log(e)
+      return res.json({err: 'ivalid user'});
     }
 
 
@@ -30,7 +39,7 @@ module.exports = (app) => {
       mch_id: '1557060081',
       nonce_str: cuid(),
       notify_url: 'https://api.yingxitech.com/pay/resultAsync',
-      openid: openid, // 'oGCPOwwKLIZNVOa8TOqUOsdbDpLs'
+      openid, // 'oGCPOwwKLIZNVOa8TOqUOsdbDpLs'
       out_trade_no: cuid(),
       spbill_create_ip: '42.226.30.38',
       total_fee: 50000,
