@@ -111,7 +111,7 @@ module.exports = (app) => {
     const {result_code ,return_code} = req.body.xml;
     if (result_code[0] === 'SUCCESS' && return_code[0] === 'SUCCESS') {
       const {appid ,mch_id, openid, total_fee, out_trade_no, transaction_id} = req.body.xml;
-      const fee = String(openid === 'oGCPOwwKLIZNVOa8TOqUOsdbDpLs'? 1: 50000); //50000
+      const fee = String(openid[0] === 'oGCPOwwKLIZNVOa8TOqUOsdbDpLs'? 1: 50000); //50000
       console.log('fee:', fee);
       if (appid[0] === 'wx09fc8bca51c925c7' && mch_id[0] === '1557060081' && total_fee[0] === fee) {
         try {
