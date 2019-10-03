@@ -136,10 +136,10 @@ module.exports = (app) => {
         });
         
 
-        user_token = await user.generateAuthToken(ip, client, 60 * 24 *7);
+        await user.save();
 
       } else {
-        const user_update = await user.updateOne({
+        const user_update = await user.update({
           unionid,
           openid,
           nickname,
@@ -166,7 +166,7 @@ module.exports = (app) => {
 
 
 
-    const redirect_url = `https://yingxitech.com/pay?subscribe=${subscribe}&openid=${unionid}&token=${user_token}`;
+    const redirect_url = `https://yingxitech.com/pay?subscribe=${subscribe}&unionid=${unionid}`;
     res.redirect(redirect_url);
 
   });

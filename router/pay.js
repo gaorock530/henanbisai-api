@@ -107,7 +107,7 @@ module.exports = (app) => {
         try {
           const user = await USER.findOne({openid: openid[0]});
           if (user) {
-            const updateRace = await RACE.findByIdAndUpdate(user._id, {bisai_paid: true, bisai_out_trade_no: out_trade_no[0], bisai_transaction_id: transaction_id[0]});
+            const updateRace = await RACE.findOneAndUpdate({baoming_id: user._id}, {bisai_paid: true, bisai_out_trade_no: out_trade_no[0], bisai_transaction_id: transaction_id[0]});
             console.log(updateRace)
           }
           

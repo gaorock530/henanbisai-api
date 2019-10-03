@@ -61,6 +61,7 @@ module.exports = (app) => {
     race.nickname = user.nickname;
     race.pic = user.pic;
     race.unionid = user.unionid;
+    console.log(race)
 
     if (!race) return res.json({err: 'invaid id.'}) 
 
