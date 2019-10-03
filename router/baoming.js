@@ -51,6 +51,8 @@ module.exports = (app) => {
   app.post('/baoming/verify', async (req, res) => {
 
     const {unionid} = req.body;
+
+    console.log(req.body)
     if (!unionid) return res.json({err: 'invaid request.'}) 
 
     const user = await USER.findOne({unionid});
