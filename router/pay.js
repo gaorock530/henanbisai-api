@@ -22,7 +22,7 @@ module.exports = (app) => {
 
     let openid;
     try {
-      const user = USER.findOne({unionid});
+      const user = await USER.findOne({unionid});
       if (!user) return res.json({err: 'ivalid user'});
       // openid = user._doc.openid;
       console.log(user)
