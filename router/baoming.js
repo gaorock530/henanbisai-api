@@ -57,6 +57,7 @@ module.exports = (app) => {
 
     const user = await USER.findOne({unionid});
     console.log(user);
+    if (!user.baoming_id) res.json({err: 'invaid baoming.'}) 
     console.log('/baoming/verify', user.baoming_id)
     if (!user) return res.json({err: 'invaid request.'}) 
     const race = await RACE.findById(user.baoming_id);
