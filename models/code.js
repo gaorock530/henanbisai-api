@@ -8,7 +8,7 @@ const schema = new mongoose.Schema({
   /*-----------------------------------------------
     Basic feilds
   -------------------------------------------------*/ 
-  openid: {
+  unionid: {
     type: String,
     unique: true,
     required: true

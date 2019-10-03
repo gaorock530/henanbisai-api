@@ -5,25 +5,25 @@ const sendms = require('../helper/text');
 
 module.exports = (app) => {
   app.post('/code/get', async (req, res) => {
-    if (!req.body || !req.body.phone || !req.body.openid) return res.json({err: 'invalid request.', status: 2});
+    if (!req.body || !req.body.phone || !req.body.unionid) return res.json({err: 'invalid request.', status: 2});
 
-    const openid = req.body.openid;
+    const unionid = req.body.unionid;
     const phone = String(req.body.phone);
 
     try {
       // check user existence
-      const user = await USER.findOne({openid});
+      const user = await USER.findOne({unionid});
       if (!user) return res.json({err: 'invalid id.', status: 2});
       const code = String((Math.random()*(999999-100001+1)+100001) | 0);
       // check code existence
-      const savedCode = await CODE.findOne({openid});
+      const savedCode = await CODE.findOne({unionid});
 
       // no-sent before
       if (!savedCode) {
-        const sendRes = await sendms(openid, phone, code);
+        const sendRes = await sendms(unionid, phone, code);
         if (sendRes) return res.json({notice: sendRes, status: 2});
         const newCode = new CODE({
-          openid,
+          unionid,
           phone,
           code,
           expires: ConvertUTCTimeToLocalTime(true, false, 10)
@@ -35,7 +35,7 @@ module.exports = (app) => {
       // sent before
       } else {
         if(ConvertUTCTimeToLocalTime(true) >= savedCode.expires || phone !== savedCode.phone) {
-          const sendRes = await sendms(openid, phone, code);
+          const sendRes = await sendms(unionid, phone, code);
           if (sendRes) return res.json({notice: sendRes, status: 2});
           await savedCode.updateOne({
             phone,
@@ -63,16 +63,16 @@ module.exports = (app) => {
   });
 
   app.post('/code/verify', async (req, res) => {
-    if (!req.body || !req.body.phone || !req.body.openid || !req.body.code) return res.json({err: 'invalid request.'});
-    const openid = req.body.openid;
+    if (!req.body || !req.body.phone || !req.body.unionid || !req.body.code) return res.json({err: 'invalid request.'});
+    const unionid = req.body.unionid;
     const phone = String(req.body.phone);
     const code = String(req.body.code);
 
     console.log(req.body)
 
     try {
-      const savedCode = await CODE.findOne({openid});
-      // check openid/phone
+      const savedCode = await CODE.findOne({unionid});
+      // check unionid/phone
       if (!savedCode) return res.json({err: 'invalid phone/id.'});
       // check expire time
       if (ConvertUTCTimeToLocalTime(true) < savedCode.expires) {
