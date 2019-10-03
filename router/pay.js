@@ -112,6 +112,7 @@ module.exports = (app) => {
     if (result_code[0] === 'SUCCESS' && return_code[0] === 'SUCCESS') {
       const {appid ,mch_id, openid, total_fee, out_trade_no, transaction_id} = req.body.xml;
       const fee = String(openid === 'oGCPOwwKLIZNVOa8TOqUOsdbDpLs'? 1: 50000); //50000
+      console.log('fee:', fee);
       if (appid[0] === 'wx09fc8bca51c925c7' && mch_id[0] === '1557060081' && total_fee[0] === fee) {
         try {
           const user = await USER.findOne({openid: openid[0]});
@@ -119,12 +120,17 @@ module.exports = (app) => {
             const updateRace = await RACE.findByIdAndUpdate(user.baoming_id, {bisai_paid: true, bisai_out_trade_no: out_trade_no[0], bisai_transaction_id: transaction_id[0]});
             console.log(updateRace)
           }
-          
-          
         }catch(e) {
           console.log(e);
         }
+      } else {
+        console.log('appid[0]:', appid[0]);
+        console.log('mch_id[0]:', mch_id[0]);
+        console.log('total_fee[0]:', total_fee[0]);
       }
+    } else {
+      console.log('result_code[0]:', result_code[0])
+      console.log('return_code[0]:', return_code[0])
     }
 
     res.set('Content-Type', 'text/xml');
