@@ -111,12 +111,12 @@ module.exports = (app) => {
     const {result_code ,return_code} = req.body.xml;
     if (result_code[0] === 'SUCCESS' && return_code[0] === 'SUCCESS') {
       const {appid ,mch_id, openid, total_fee, out_trade_no, transaction_id} = req.body.xml;
-      const fee = String(1); //50000
+      const fee = String(openid === 'oGCPOwwKLIZNVOa8TOqUOsdbDpLs'? 1: 50000); //50000
       if (appid[0] === 'wx09fc8bca51c925c7' && mch_id[0] === '1557060081' && total_fee[0] === fee) {
         try {
           const user = await USER.findOne({openid: openid[0]});
           if (user) {
-            const updateRace = await RACE.findOneAndUpdate({baoming_id: user._id}, {bisai_paid: true, bisai_out_trade_no: out_trade_no[0], bisai_transaction_id: transaction_id[0]});
+            const updateRace = await RACE.findByIdAndUpdate(user.baoming_id, {bisai_paid: true, bisai_out_trade_no: out_trade_no[0], bisai_transaction_id: transaction_id[0]});
             console.log(updateRace)
           }
           
