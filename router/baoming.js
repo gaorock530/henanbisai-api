@@ -6,7 +6,7 @@ module.exports = (app) => {
   app.post('/baoming', async (req, res) => {
 
     const {
-      openid,
+      unionid,
       name,
       sex,
       age,
@@ -21,7 +21,7 @@ module.exports = (app) => {
     
 
     const race = new RACE({
-      openid,
+      unionid,
       baoming_name: name,
       baoming_sex: sex, 
       baoming_age: age,
@@ -42,22 +42,17 @@ module.exports = (app) => {
       console.log(e);
       res.json({err: 'invaid request.'});
     }
-
-
-    
   });
 
   app.post('/baoming/verify', async (req, res) => {
 
-    const {openid} = req.body;
-    if (!openid) return res.json({err: 'invaid request.'}) 
+    const {_id} = req.body;
+    if (!_id) return res.json({err: 'invaid request.'}) 
 
-    const race = await RACE.findOne({openid});
+    const race = await RACE.findById(_id);
 
     if (!race) res.json({err: 'invaid id.'}) 
 
     res.json(race)
   });
-
-  
 }

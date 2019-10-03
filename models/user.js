@@ -16,6 +16,11 @@ const schema = new mongoose.Schema({
   /*-----------------------------------------------
     Basic feilds
   -------------------------------------------------*/ 
+  unionid: {
+    type: String,
+    unique: true,
+    required: true
+  },
   openid: {
     type: String,
     unique: true,

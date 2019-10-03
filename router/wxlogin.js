@@ -40,9 +40,10 @@ module.exports = (app) => {
     // get 'access_token' and 'refresh_token'
 
     let openid;
+    let unionid;
     let access_token;
     const code = req.query.code;
-    const type = req.query.type;  //baoming, webpage
+    const type = req.query.type;  //baoming
     const appid = AUTH[type].appid;
     const appsecret = AUTH[type].appsecret;
 
@@ -64,15 +65,7 @@ module.exports = (app) => {
       return res.send('发生错误，请关闭本页面，重新进入！{token}');
     }
 
-    // Step 3.1
-    // get User
-    let user;
-    try {
-      user = await USER.findOne({openid});
-      console.log(user);
-    }catch(e) {
-      console.log(e);
-    }
+    
 
 
 
@@ -96,14 +89,14 @@ module.exports = (app) => {
       console.log('more_info: ');
       console.log(more_response.data);
 
-      const info_response = await axios.get(info_url); 
-      console.log('info_response: ');
-      console.log(info_response.data);
+      // const info_response = await axios.get(info_url); 
+      // console.log('info_response: ');
+      // console.log(info_response.data);
 
-      openid = more_response.data.openid;
       nickname = more_response.data.nickname;
       pic = more_response.data.headimgurl;
       sex = more_response.data.sex;
+      unionid = more_response.data.unionid;
 
       // User subscribed
       if (more_response.data.subscribe === 1) {
@@ -114,12 +107,6 @@ module.exports = (app) => {
         wx_subscribe_scene = more_response.data.subscribe_scene;
       } else {
         subscribe = 0;
-        // const info_response = await axios.get(info_url); 
-        // openid = info_response.data.openid;
-        // nickname = info_response.data.nickname;
-        // pic = info_response.data.headimgurl;
-        // sex = info_response.data.sex;
-        // console.log(info_response.data);
       }
 
     }catch(e) {
@@ -134,37 +121,50 @@ module.exports = (app) => {
     const client = agent.os.toString() + '&' + agent.device.toString() + '&' + agent.toAgent();
     const ip = getClientIP(req);
 
-    let user_token;
-    if (!user) {
-      user = new USER({
-        openid,
-        nickname,
-        pic,
-        sex,
-        wx_province,
-        wx_city,
-        wx_country,
-        wx_subscribe_scene,
-        registerDetails: {ip, client},
-        lastVisit: {ip, client},
-        auth_level: 0
-      });
-      
-      try {
+    let user, user_token;
+    try {
+      user = await USER.findOne({unionid});
+      if (!user) {
+        user = new USER({
+          unionid,
+          openid,
+          nickname,
+          pic,
+          sex,
+          wx_province,
+          wx_city,
+          wx_country,
+          wx_subscribe_scene,
+          registerDetails: {ip, client},
+          lastVisit: {ip, client},
+          auth_level: 0
+        });
+        
+
         user_token = await user.generateAuthToken(ip, client, 60 * 24 *7);
-        console.log(user_token);
-      } catch(e) {
-        console.log(e);
+
+      } else {
+        const user_update = await user.updateOne({
+          openid,
+          nickname,
+          pic,
+          wx_province,
+          wx_city,
+          wx_country,
+          wx_subscribe_scene,
+          $inc: { visit_times: 1 },
+          lastVisit: {ip, client, time: ConvertUTCTimeToLocalTime(true)}
+        });
+        console.log(user_update);
       }
-    } else {
-      const user_update = await user.updateOne({
-        nickname,
-        pic,
-        $inc: { visit_times: 1 },
-        lastVisit: {ip, client, time: ConvertUTCTimeToLocalTime(true)}
-      });
-      console.log(user_update);
+
+
+      console.log(user);
+    }catch(e) {
+      console.log(e);
     }
+
+    
     
 
 
