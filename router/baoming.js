@@ -73,7 +73,7 @@ module.exports = (app) => {
       pic:user.pic,
       unionid:user.unionid
     }
-    console.log(race)
+    console.log(obj)
 
     
 
