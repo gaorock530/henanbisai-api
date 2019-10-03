@@ -7,14 +7,15 @@ const convert = require('xml-js');
 const xmlparser = require('express-xml-bodyparser');
 const ConvertUTCTimeToLocalTime = require('../helper/timezone');
 const RACE = require('../models/race');
+const USER = require('../models/user');
 
 
 
 module.exports = (app) => {
 
   app.post('/pay/request', async (req, res) => {
-    const openid = req.body.openid;
-    if (!openid) {
+    const unionid = req.body.unionid;
+    if (!unionid) {
       console.log('on id!')  
       return res.json({err: 'invalid request.'});
     
@@ -104,8 +105,13 @@ module.exports = (app) => {
       const fee = String(1); //50000
       if (appid[0] === 'wx09fc8bca51c925c7' && mch_id[0] === '1557060081' && total_fee[0] === fee) {
         try {
-          const updateRace = await RACE.findOneAndUpdate({openid: openid[0]}, {bisai_paid: true, bisai_out_trade_no: out_trade_no[0], bisai_transaction_id: transaction_id[0]});
-          console.log(updateRace)
+          const user = await USER.findOne({openid: openid[0]});
+          if (user) {
+            const updateRace = await RACE.findByIdAndUpdate(user._id, {bisai_paid: true, bisai_out_trade_no: out_trade_no[0], bisai_transaction_id: transaction_id[0]});
+            console.log(updateRace)
+          }
+          
+          
         }catch(e) {
           console.log(e);
         }
