@@ -68,7 +68,7 @@ module.exports = (app) => {
 
     console.log('/baoming/verify', race);
     const obj = {
-      ...race,
+      ...race._doc,
       nickname: user.nickname,
       pic:user.pic,
       unionid:user.unionid
