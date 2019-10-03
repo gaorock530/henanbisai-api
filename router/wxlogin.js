@@ -116,7 +116,7 @@ module.exports = (app) => {
     const client = agent.os.toString() + '&' + agent.device.toString() + '&' + agent.toAgent();
     const ip = getClientIP(req);
 
-    let user, user_token;
+    let user;
     try {
       user = await USER.findOne({unionid});
       if (!user) {
