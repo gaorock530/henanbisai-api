@@ -29,6 +29,9 @@ const schema = new mongoose.Schema({
   nickname: { type: String, trim: true},
   pic: {type: String},
   sex: { type: Number}, // 1 - male, 2 - female, 0 - unknown 
+
+  baoming_id: {type: String, unique: true},
+
   wx_province: { type: String, default: '' },
   wx_city: { type: String, default: '' },
   wx_country: { type: String, default: '' },

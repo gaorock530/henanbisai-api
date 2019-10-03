@@ -1,4 +1,5 @@
 const RACE = require('../models/race');
+const USER = require('../models/user');
 
 module.exports = (app) => {
 
@@ -21,7 +22,6 @@ module.exports = (app) => {
     
 
     const race = new RACE({
-      unionid,
       baoming_name: name,
       baoming_sex: sex, 
       baoming_age: age,
@@ -35,7 +35,11 @@ module.exports = (app) => {
     })
 
     try {
-      await race.save();
+      const reacSaved = await race.save();
+      const user = await USER.findOneAndUpdate({unionid}, {
+        baoming_id: reacSaved._id
+      })
+
       console.log('race saved.');
       res.json({status: 0});
     }catch(e) {
