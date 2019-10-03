@@ -8,11 +8,6 @@ const schema = new mongoose.Schema({
   /*-----------------------------------------------
     Basic feilds
   -------------------------------------------------*/ 
-  unionid: {
-    type: String,
-    unique: true,
-    required: true
-  },
   baoming: { type: Boolean, default: false},
   
   baoming_name: { type: String, required: true },
