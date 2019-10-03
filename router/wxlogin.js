@@ -93,27 +93,33 @@ module.exports = (app) => {
     const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
     try {
       const more_response = await axios.get(more_info); 
+      console.log('more_info: ');
       console.log(more_response.data);
+
+      const info_response = await axios.get(info_url); 
+      console.log('info_response: ');
+      console.log(info_response.data);
+
+      openid = more_response.data.openid;
+      nickname = more_response.data.nickname;
+      pic = more_response.data.headimgurl;
+      sex = more_response.data.sex;
 
       // User subscribed
       if (more_response.data.subscribe === 1) {
         subscribe = 1;
-        openid = more_response.data.openid;
-        nickname = more_response.data.nickname;
-        pic = more_response.data.headimgurl;
-        sex = more_response.data.sex;
         wx_province = more_response.data.province;
         wx_city = more_response.data.city;
         wx_country = more_response.data.country;
         wx_subscribe_scene = more_response.data.subscribe_scene;
       } else {
         subscribe = 0;
-        const info_response = await axios.get(info_url); 
-        openid = info_response.data.openid;
-        nickname = info_response.data.nickname;
-        pic = info_response.data.headimgurl;
-        sex = info_response.data.sex;
-        console.log(info_response.data);
+        // const info_response = await axios.get(info_url); 
+        // openid = info_response.data.openid;
+        // nickname = info_response.data.nickname;
+        // pic = info_response.data.headimgurl;
+        // sex = info_response.data.sex;
+        // console.log(info_response.data);
       }
 
     }catch(e) {
@@ -170,6 +176,8 @@ module.exports = (app) => {
   });
 
 
+
+  // login from webpage Callback API
   app.get('/authlogin/webpage', async (req, res) => {
     // Step 2
     // from Callback url get Code
@@ -183,7 +191,6 @@ module.exports = (app) => {
     let openid;
     let access_token;
     const code = req.query.code;
-    const type = req.query.type;  //baoming, webpage
     const appid = AUTH['webpage'].appid;
     const appsecret = AUTH['webpage'].appsecret;
 
@@ -236,26 +243,18 @@ module.exports = (app) => {
       const more_response = await axios.get(more_info); 
       console.log(more_response.data);
 
+      nickname = more_response.data.nickname;
+      pic = more_response.data.headimgurl;
+      sex = more_response.data.sex;
+
       // User subscribed
       if (more_response.data.subscribe === 1) {
         subscribe = 1;
-        openid = more_response.data.openid;
-        nickname = more_response.data.nickname;
-        pic = more_response.data.headimgurl;
-        sex = more_response.data.sex;
         wx_province = more_response.data.province;
         wx_city = more_response.data.city;
         wx_country = more_response.data.country;
         wx_subscribe_scene = more_response.data.subscribe_scene;
-      } else {
-        subscribe = 0;
-        const info_response = await axios.get(info_url); 
-        openid = info_response.data.openid;
-        nickname = info_response.data.nickname;
-        pic = info_response.data.headimgurl;
-        sex = info_response.data.sex;
-        console.log(info_response.data);
-      }
+      } 
 
     }catch(e) {
       console.log(e);
@@ -348,7 +347,7 @@ async function requireAccessToken () {
 
 function updateAccessToken (token) {
   console.log('log: ', 'updateAccessToken');
-  token.expires_time = Date.now() + 7000000;
+  token.expires_time = ConvertUTCTimeToLocalTime(true, false, 115);
   const tokenJson = JSON.stringify(token);
 
   try {
