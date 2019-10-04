@@ -60,7 +60,7 @@ module.exports = (app) => {
       console.log(access_token_response.data);
       openid = access_token_response.data.openid;
       unionid = access_token_response.data.unionid;
-      access_token = access_token_response.data.access_token;
+      //access_token = access_token_response.data.access_token;
     }catch(e) {
       console.log(e);
       return res.send('发生错误，请关闭本页面，重新进入！{token}');
