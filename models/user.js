@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-// const cuid = require('cuid');
+const cuid = require('cuid');
 // const bcrypt = require('bcryptjs');
 const {hex_md5} = require('../helper/md5');
 const {b64_sha256} = require('../helper/sha256');
@@ -30,7 +30,7 @@ const schema = new mongoose.Schema({
   pic: {type: String},
   sex: { type: Number}, // 1 - male, 2 - female, 0 - unknown 
 
-  baoming_id: {type: String},
+  baoming_id: {type: String, default: cuid()},
 
   wx_province: { type: String, default: '' },
   wx_city: { type: String, default: '' },
