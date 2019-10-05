@@ -8,7 +8,7 @@ module.exports = (app) => {
     console.log('--------------------------')
     console.log('/share');
     console.log('--------------------------')
-
+    console.log(req.body)
     const {uri, id, type} = req.body;
     if (!uri || !id || !type) return res.json({err: 'invalid request'});
     
