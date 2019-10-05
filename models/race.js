@@ -25,10 +25,16 @@ const schema = new mongoose.Schema({
   bisai_transaction_id: {type: String},
   bisai_out_trade_no: {type: String},
   bisai_paid: {type: Boolean, default: false},
+  bisai_paid_amount: {type: Number},
+  bisai_paid_date: {type: Date},
+  bisai_paid_status: {type: Number},
 
   juesai_transaction_id: {type: String},
   juesai_out_trade_no: {type: String},
   juesai_paid: {type: Boolean, default: false},
+  juesai_paid_amount: {type: Number},
+  juesai_paid_date: {type: Date},
+  juesai_paid_status: {type: Number},
 
 });
 

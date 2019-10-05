@@ -117,7 +117,13 @@ module.exports = (app) => {
         try {
           const user = await USER.findOne({openid: openid[0]});
           if (user) {
-            const updateRace = await RACE.findByIdAndUpdate(user.baoming_id, {bisai_paid: true, bisai_out_trade_no: out_trade_no[0], bisai_transaction_id: transaction_id[0]});
+            const updateRace = await RACE.findByIdAndUpdate(user.baoming_id, {
+              bisai_paid: true, 
+              bisai_paid_amount: Number(fee),
+              bisai_paid_date: ConvertUTCTimeToLocalTime(true),
+              bisai_out_trade_no: out_trade_no[0], 
+              bisai_transaction_id: transaction_id[0]
+            });
             console.log(updateRace)
           }
         }catch(e) {

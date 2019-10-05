@@ -43,5 +43,6 @@ require('./router/map')(app);
 require('./router/baoming')(app);
 
 require('./router/pay')(app);
+require('./router/share')(app);
 
 

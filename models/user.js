@@ -31,6 +31,7 @@ const schema = new mongoose.Schema({
   sex: { type: Number}, // 1 - male, 2 - female, 0 - unknown 
 
   baoming_id: {type: String, unique: true},
+  baoming_discount: {type: Boolean, defalut: false},
 
   wx_province: { type: String, default: '' },
   wx_city: { type: String, default: '' },
