@@ -166,7 +166,7 @@ module.exports = (app) => {
 
 
 
-    const redirect_url = `https://yingxitech.com/pay?subscribe=${subscribe}&unionid=${unionid}`;
+    const redirect_url = `https://yingxitech.com/baoming?subscribe=${subscribe}&unionid=${unionid}`;
     res.redirect(redirect_url);
 
   });
