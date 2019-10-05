@@ -10,6 +10,7 @@ module.exports = (app) => {
     console.log('--------------------------')
     console.log(req.body)
     const {uri, id, type} = req.body;
+    console.log(uri, id, type)
     if (!uri || !id || !type) return res.json({err: 'invalid request'});
     
     try {
