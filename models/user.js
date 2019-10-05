@@ -30,7 +30,7 @@ const schema = new mongoose.Schema({
   pic: {type: String},
   sex: { type: Number}, // 1 - male, 2 - female, 0 - unknown 
 
-  baoming_id: {type: String, unique: true},
+  baoming_id: {type: String, unique: false},
   baoming_discount: {type: Boolean, defalut: false},
 
   wx_province: { type: String, default: '' },
