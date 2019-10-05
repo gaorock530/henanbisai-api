@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
   -------------------------------------------------*/ 
   share_unionid: {type: String, unique: true},
   share_times: {type: Number, default: 1},
-  share_opened: {type: Number, default: 0}
+  share_opened: {type: Number, default: 0},
   share_circleAt: {type: Date}
 });
 
