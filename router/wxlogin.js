@@ -139,7 +139,7 @@ module.exports = (app) => {
         await user.save();
 
       } else {
-        const user_update = await user.update({
+        const user_update = await user.updateOne({
           unionid,
           openid,
           nickname,

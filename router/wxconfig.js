@@ -8,19 +8,21 @@ const ConvertUTCTimeToLocalTime = require('../helper/timezone');
 
 module.exports = (app) => {
   app.post('/wxconfig', async (req, res) => {
+
+    const {timestamp, noncestr, url} = req.body;
+    if (!timestamp || !noncestr || !url) return res.json({err: 'invalid access'});
+
     console.log('/wxconfig')
     const token = await getAccessToken();
     console.log('token:', token);
     const ticket = await getJsapiTicket(token);
     console.log('ticket:', ticket);
-    const timestamp = req.body.timestamp;
-    const noncestr = req.body.noncestr;
+ 
     console.log('timestamp:', timestamp);
     console.log('noncestr:', noncestr);
-    console.log(req.body);
-    console.log(req.body.url)
+
   
-    const signature = getSignature(ticket, noncestr, timestamp, req.body.url);
+    const signature = getSignature(ticket, noncestr, timestamp, url);
     console.log('signature:', signature);
     res.json({
       signature
