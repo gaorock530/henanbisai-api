@@ -202,21 +202,11 @@ module.exports = (app) => {
       }
       console.log(access_token_response.data);
       openid = access_token_response.data.openid;
-      // access_token = access_token_response.data.access_token;
+      access_token = access_token_response.data.access_token;
     }catch(e) {
       console.log(e);
       return res.send('发生错误，请关闭本页面，重新进入！{token}');
     }
-
-    // Step 3.1
-    // get User
-    // let user;
-    // try {
-    //   user = await USER.findOne({openid});
-    //   console.log(user);
-    // }catch(e) {
-    //   console.log(e);
-    // }
 
 
 
@@ -230,11 +220,12 @@ module.exports = (app) => {
       console.log(e);
     }
 
-    let subscribe, nickname, pic, sex, wx_province, wx_city, wx_country, wx_subscribe_scene;
+    let nickname, pic, sex;
     // subscribed User info - more
-    const more_info = `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${api_token}&openid=${openid}&lang=zh_CN`;
+    // const more_info = `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${api_token}&openid=${openid}&lang=zh_CN`;
     // NOT subscribed User info - less
-    // const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
+    const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
+
     try {
       const more_response = await axios.get(more_info); 
       console.log(more_response.data);
@@ -242,20 +233,17 @@ module.exports = (app) => {
       nickname = more_response.data.nickname;
       pic = more_response.data.headimgurl;
       sex = more_response.data.sex;
-      subscribe = more_response.data.subscribe;
-
-      // User subscribed
-      if (more_response.data.subscribe === 1) {
-        wx_province = more_response.data.province;
-        wx_city = more_response.data.city;
-        wx_country = more_response.data.country;
-        wx_subscribe_scene = more_response.data.subscribe_scene;
-      } 
+      unionid = more_response.data.unionid;
 
     }catch(e) {
       console.log(e);
       return res.send('发生错误，请关闭本页面，重新进入！{info}');
     }
+
+
+    // step 4.1
+    
+
 
     // Step 5
     // write / update Database
@@ -264,43 +252,22 @@ module.exports = (app) => {
     const client = agent.os.toString() + '&' + agent.device.toString() + '&' + agent.toAgent();
     const ip = getClientIP(req);
 
-    let user_token;
-    if (!user) {
-      user = new USER({
-        openid,
-        nickname,
-        pic,
-        sex,
-        wx_province,
-        wx_city,
-        wx_country,
-        wx_subscribe_scene,
-        registerDetails: {ip, client},
-        lastVisit: {ip, client},
-        auth_level: 0
-      });
-      
-      try {
-        user_token = await user.generateAuthToken(ip, client, 60 * 24 * 7);
-        console.log(user_token);
-      } catch(e) {
-        console.log(e);
+    let user, user_token = 0;
+    try { 
+      user = await USER.findOne({unionid});
+      if (!user || user.unionid !== 'oubKi0h7gOnLP7BMpTuUVpTiEl0E') {
+        user_token = 0;
+      } else {
+        user_token = 1;
       }
-    } else {
-      const user_update = await user.updateOne({
-        nickname,
-        pic,
-        $inc: { visit_times: 1 },
-        lastVisit: {ip, client, time: ConvertUTCTimeToLocalTime(true)}
-      });
-      console.log(user_update);
+    }catch(e) {
+      console.log(e)
     }
-    
 
 
 
    
-    const redirect_url = `https://yingxitech.com/bsbackend?subscribe=${subscribe}&openid=${openid}&token=${user_token}`;
+    const redirect_url = `https://yingxitech.com/bsbackend?token=${user_token}`;
     res.redirect(redirect_url);
     
   })
