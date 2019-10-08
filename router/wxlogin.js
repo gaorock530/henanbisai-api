@@ -227,7 +227,7 @@ module.exports = (app) => {
     const info_url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
 
     try {
-      const more_response = await axios.get(more_info); 
+      const more_response = await axios.get(info_url); 
       console.log(more_response.data);
 
       nickname = more_response.data.nickname;
