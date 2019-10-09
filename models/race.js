@@ -19,6 +19,9 @@ const schema = new mongoose.Schema({
   baoming_groupType: {type: Number, required: true},
   baoming_groupName: {type: String},
 
+  baoming_code: {type: String},
+  baoming_code_refer: {type: String},
+
 
   bisai_comment: { type: String, default: ''},
   
@@ -28,6 +31,7 @@ const schema = new mongoose.Schema({
   bisai_paid_amount: {type: Number},
   bisai_paid_date: {type: Date},
   bisai_paid_status: {type: Number},
+  bisai_pass: {type: Boolean},
 
   juesai_transaction_id: {type: String},
   juesai_out_trade_no: {type: String},
@@ -35,6 +39,7 @@ const schema = new mongoose.Schema({
   juesai_paid_amount: {type: Number},
   juesai_paid_date: {type: Date},
   juesai_paid_status: {type: Number},
+  juesai_pass: {type: Boolean},
 
 });
 

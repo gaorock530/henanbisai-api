@@ -1,6 +1,7 @@
 const USER = require('../models/user');
 const useragent = require('useragent');
 const getClientIP = require('../helper/ip');
+const auth = require('../midware/auth');
 
 module.exports = (app) => {
 
@@ -41,7 +42,7 @@ module.exports = (app) => {
   })
 
   // user Update
-  app.put('/update/:id', (req, res) => {
+  app.put('/update/:id', auth, (req, res) => {
     res.send(`update id - ${req.params.id}`)
   })
 
@@ -54,5 +55,23 @@ module.exports = (app) => {
     console.log(user)
     if (!user) return res.json({user: null});
     res.json(user)
+  })
+
+
+  // Get User
+  app.post('/users', async (req, res) => {
+    console.log('POST: /users')
+    const {page, limit} = req.query;
+    const num = limit? Number(limit): 100;
+    const skip = page? Number(page) * 5: 0;
+    try {
+      const count = await USER.find().count();
+      const selected = await USER.find().limit(num).select('nickname sex lastVisit pic visit_times wx_province wx_city baoming_id').skip(skip);
+      res.json({count, selected})
+    }catch(e) {
+      console.log(e);
+      res.json({err: 'internal'})
+    }
+    
   })
 }

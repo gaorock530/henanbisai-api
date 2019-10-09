@@ -36,7 +36,7 @@ module.exports = (app) => {
 
     try {
       const reacSaved = await race.save();
-      const user = await USER.findOneAndUpdate({unionid}, {
+      await USER.findOneAndUpdate({unionid}, {
         baoming_id: reacSaved._id
       })
 
