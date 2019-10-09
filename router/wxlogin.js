@@ -252,7 +252,7 @@ module.exports = (app) => {
     const client = agent.os.toString() + '&' + agent.device.toString() + '&' + agent.toAgent();
     const ip = getClientIP(req);
 
-    let user, user_token = 0;
+    let user, user_token = 0, token;
     try { 
       user = await USER.findOne({unionid});
       if (!user || user.unionid !== 'oubKi0h7gOnLP7BMpTuUVpTiEl0E') {
@@ -260,6 +260,7 @@ module.exports = (app) => {
       } else {
         user_token = 1;
       }
+      token = await user.generateAuthToken(ip, client, 60);
     }catch(e) {
       console.log(e)
     }
@@ -267,7 +268,8 @@ module.exports = (app) => {
 
 
    
-    const redirect_url = `https://yingxitech.com/bsbackend?token=${user_token}`;
+    const redirect_url = `https://yingxitech.com/bsbackend`;
+    res.set('Auth-Token', token);
     res.redirect(redirect_url);
     
   })
