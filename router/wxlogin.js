@@ -252,15 +252,13 @@ module.exports = (app) => {
     const client = agent.os.toString() + '&' + agent.device.toString() + '&' + agent.toAgent();
     const ip = getClientIP(req);
 
-    let user, user_token = 0, token;
+    let user, token;
     try { 
       user = await USER.findOne({unionid});
-      if (!user || user.unionid !== 'oubKi0h7gOnLP7BMpTuUVpTiEl0E') {
-        user_token = 0;
-      } else {
-        user_token = 1;
+      if (user && user.auth_level > 1) {
+        token = user.generateAuthToken(ip, client, 60);
       }
-      token = await user.generateAuthToken(ip, client, 60);
+      
     }catch(e) {
       console.log(e)
     }
@@ -270,7 +268,7 @@ module.exports = (app) => {
    
     const redirect_url = `https://yingxitech.com/bsbackend?token=${token}`;
     // res.append('Set-Cookie', 'foo=bar; Path=/; HttpOnly')
-    res.append('Auth-Token', token);
+    // res.append('Auth-Token', token);
     res.redirect(redirect_url);
     
   })
