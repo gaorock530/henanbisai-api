@@ -269,7 +269,8 @@ module.exports = (app) => {
 
    
     const redirect_url = `https://yingxitech.com/bsbackend`;
-    res.set('Auth-Token', token);
+    // res.append('Set-Cookie', 'foo=bar; Path=/; HttpOnly')
+    res.append('Auth-Token', token);
     res.redirect(redirect_url);
     
   })
