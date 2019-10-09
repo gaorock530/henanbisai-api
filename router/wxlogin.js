@@ -256,7 +256,7 @@ module.exports = (app) => {
     try { 
       user = await USER.findOne({unionid});
       if (user && user.auth_level > 1) {
-        token = user.generateAuthToken(ip, client, 60);
+        token = await user.generateAuthToken(ip, client, 60);
       }
       
     }catch(e) {
