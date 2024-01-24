@@ -249,36 +249,59 @@ app.get('/redirect', async (req, res) => {
   }
 })
 
+
+
 app.get('/u', async (req, res) => {
+  const cookie = 'PHPSESSID=5dsbimkv6pu4rgnga42rthbsco; __51vcke__K4Eg8SGElFhlWvHA=c02e95a2-c4ca-5172-811e-0ea49a7d1a97; __51vuft__K4Eg8SGElFhlWvHA=1685164511733; _ga_JPNTDP3XJE=GS1.1.1685766273.15.0.1685766273.0.0.0; Hm_lvt_20dbded09f6ac464b84faec7ab3a278b=1691308021; Hm_lpvt_20dbded09f6ac464b84faec7ab3a278b=1693593774; _ga=GA1.1.519116480.1643790333; wordpress_test_cookie=WP%20Cookie%20check; Hm_lvt_7233eaff4ea4aa81ba9933f3a0e42474=1704983825; zh_choose=s; mbt_theme_night=1; __51uvsct__K4Eg8SGElFhlWvHA=121; wordpress_logged_in_c31b215c0db6cdb6478d719de4022ec2=punkhead%7C1707320021%7CM02SU7z2vZqHq9yHpEx1SHPPBPOi5uATaXKFqwk2f3j%7C56450092bbebe6eb525e204c4d262047ddc9e8e6594e0a231766d888b4bb990c; erphp_login_tips=1; mycred_site_visit=1; Hm_lpvt_7233eaff4ea4aa81ba9933f3a0e42474=1706110520; __vtins__K4Eg8SGElFhlWvHA=%7B%22sid%22%3A%20%2222b1297c-7a41-5536-a739-2b7f6a1b325b%22%2C%20%22vd%22%3A%207%2C%20%22stt%22%3A%20109438%2C%20%22dr%22%3A%2066263%2C%20%22expires%22%3A%201706111999999%2C%20%22ct%22%3A%201706110520110%7D; _ga_EYK4RPLNVD=GS1.1.1706110410.59.1.1706110609.0.0.0'
   try {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({ executablePath: "C:/Program\ Files\ (x86)/Google/Chrome/Application/chrome.exe" });
     const page = await browser.newPage();
+    await page.setExtraHTTPHeaders({ "Cookie": cookie })
     // Navigate the page to a URL
-    await page.goto('https://developer.chrome.com/');
+    await page.goto('https://www.lgych.com/42671.html');
+    // await page.goto('https://moyin520.com/category/blu-ray/jp/page/3/');
     // Set screen size
-    await page.setViewport({ width: 1080, height: 1024 });
+    // await page.setViewport({ width: 1080, height: 1024 });
 
     // Type into search box
-    await page.type('.search-box__input', 'automate beyond recorder');
+    // await page.type('.search-box__input', 'automate beyond recorder');
 
     // Wait and click on first result
-    const searchResultSelector = '.search-box__link';
-    await page.waitForSelector(searchResultSelector);
-    await page.click(searchResultSelector);
+    // const searchResultSelector = 'button.DocSearch.DocSearch-Button';
+    // await page.locator(searchResultSelector).click();
+    // await page.click(searchResultSelector);
+
+    // await page.type('input.DocSearch-Input', 'window', { delay: 100 });
 
     // Locate the full title with a unique string
-    const textSelector = await page.waitForSelector(
-      'text/Customize and automate'
+    const elementSelector = await page.waitForSelector(
+      '.erphpdown-cart a'
     );
-    const fullTitle = await textSelector?.evaluate(el => el.textContent);
+    // await page.locator('.erphpdown-cart a').click();
+    const link = await elementSelector?.evaluate(el => el.href);
+    if (!link) throw Error('no link')
+
+    // const page2 = await browser.newPage();
+    // await page2.setExtraHTTPHeaders({ "Cookie": cookie })
+    // await page2.goto(link);
+    // const title = page.title()
+    // const selector = await page.waitForSelector(
+    //   '.erphpdown-msg a'
+    // )
+
+    // const panLink = await selector?.evaluate(el => el.href);
+
 
     // Print the full title
-    console.log('The title of this blog post is "%s".', fullTitle);
-
+    // console.log('The title of this blog post is "%s".', fullTitle);
+    // const text = await page.title()
+    res.send(link)
     await browser.close();
-  }
-  catch (e: any) {
+  } catch (e: any) {
     res.send(e.toString())
+  } finally {
+
+    console.log('ok')
   }
 
 })
