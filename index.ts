@@ -250,13 +250,100 @@ app.get('/redirect', async (req, res) => {
   }
 })
 
+const pan_cookie = [
+  'CS	FE7DC32BEB02B35F4B10EC4C3D0C5B7E44F7878595E74ADC75983FBAC4791816	pan.baidu.com	/share',
+  'XFS	O+nxlqjHrAC3DSi1ubE4urobS59klat+WlA/OAn0oh4=	xlab.baidu.com	/',
+  'HMTK	1	hm.baidu.com	/',
+  'pcsett	1706266359-e23e737b7cde6c2d6979a7605494d1eb	.pcs.baidu.com	/',
+  'ab_sr	1.0.1_M2EyZTRlMWU2YTU2ZTU4NWJiM2MxNmFmMzQ5OGRjMTljOGU0MTZmYTQyYzM0NjE0NGM5ODY3NmE5Mzk3OGMwNDA3NzA3MDU0ZTljOTlkYzIwNTBkMjBmMTRkMzY4ODYxNDEzZGEwNWNlY2FkZWVkYTFkODRlZDRkODMyMmM4MmIyOTc3ODQ0MzliN2NjMzUyMjQyOGI1ZWIzNjNhOTQxNTdlY2NiMGQwZWFhNzk1MGVhNTY0ZGU4ZTA3NDM1MGM1MzAzYTU4ZjI5ZTI4MzgzNjhiN2I1NDNkNTNkZGJhZTk=	.baidu.com	/',
+  'ndut_fmt	F4092222D172EF98211475302AE4C82BFBBBB4AE009E7D559689EABD5834E8DC	pan.baidu.com	/',
+  'PANPSC	3979432734587441064%3AKkwrx6t0uHAniZpAMa4AEEy7txDAjOFZRbw49Y5v5NCUnH0D70rj1ivbCphtI0nM8JOp%2F68XGKLRyVky035tyO5qPPkFjOIDCqcpamQkCIlk%2FzCt4mbzqKiL3EJlgS7xZ0OG5lQgLmhfZeVSwpGLRrBu2GS532flGQkywSkuuxIxGZiuUUeCal1pBNg8gtV%2Fr1Mfimlqq%2B74E%2BxIOlMk2w%3D%3D	.pan.baidu.com	/',
+  'BDCLND	F6t5vR8WamR5iIB9RGadzIo1pYgAKmk1u%2F2Q1rUMLWA%3D	.pan.baidu.com	/',
+  'BDSFRCVID_BFESS	KCAOJeC62wDdzJ5fmU2p5ToL1Qft3dvTH6aoCax3r-ZozSqD1IVqEG0PBf8g0KAb-1hKogKKBeOTHFIF_2uxOjjg8UtVJeC6EG0Ptf8g0f5	.baidu.com	/',
+  'PSINO	1	.baidu.com	/',
+  'HMACCOUNT_BFESS	3FC1702A6F25AFB8	.hm.baidu.com	/',
+  'ZFY	uMxy3g9Ddmxq:AaDF9E1mfFEe5IlDWurshxDJnON9c6c:C	.baidu.com	/',
+  'BAIDUID_BFESS	3119C78314041F42E5B5AF134AA0AC0A:FG=1	.baidu.com	/',
+  'STOKEN	bb5780d3186af897f76282f3ae9adf996c0f61b85f1e1c3e2f7fe037b7fa98dd	.pcs.baidu.com	/',
+  'H_BDCLCKID_SF_BFESS	tbPj_D_XJIK3Hnjgq4JShP0ehmT22-usMjAj2hcH0KLKEI32X-Qkb4FSKN5-axniJDQEKfcIWfb1MRjvKPQlqDujbMOJBpoqLn74-p5TtUJD8DnTDMRhXJtWhnbyKMni0DT9-pnjLpQrh459XP68bTkA5bjZKxtq3mkjbPbDfn02eCKuj5AhDjJQjH8s-P-jttoOXRRXtIK_Hnur3f7PXUI8LNDH36vHfRuf0DTD-PJqjqvoWxcAMj8TDnO7ttoy-nn8KbrtafjWqp39DMCWXxL1Db3AKjvMtg3t2R6hbIQoepvoL4oc3Mks0-jdJJQOBKQB0KnGbUQkeq8CQft20b0EeMtjKjLEtRk8oI85JDvDqTrP-trf5DCShUFsa-TRB2Q-XPoO3KJMDfT2bxbZKxIVLNbPhPnbQ6cpBfbgylRp8P3y0bb2DUA1y4vp0qbt0mTxoUJ2Bb3IsxjMqtnWbJ_ebPRi3tQ9QgbMbpQ7tt5W8ncFbT7l5hKpbt-q0x-jLTnhVn0MBCK0hD0wD5-bj6P8qxbXetr0KCOEBn58HJOoDDvX5nocy4LbKxnxJn3LyGnh5MT-WJoThU59MPOl5lKq3-OkWUQ0BecKQR393p3HffQD3noNQfbQ0hO9KMjlLG4LW-nH-R7JOpvtbfnxy--rQRPH-Rv92DQMVU52QqcqEIQHQT3m5-5bbN3ut6IHJR4foDPXJCvbfP0k-P7Eh4_VMfOba46MHD7XVhvn0l7keq8CDRJUbbIpjfjLL6jjJGny2Ijl5t-5e-Q2y5jHhUt_2abHelTyMH7DKIjYQtjpsIJML4DWbT8ULfKLJ4viaKviahoHBMb1slTDBT5h2M4qMxtOLR3pWDTm_q5TtUJMeCnTD-Dhe4tX-NFtJ6FHJf5	.baidu.com	/',
+  'STOKEN	bb5780d3186af897f76282f3ae9adf99e7e9a6dc265cee35ba1d5bc8142ac638	.pan.baidu.com	/',
+  'H_PS_PSSID	40132_40156_39996	.baidu.com	/',
+  'XFT	mtxu2Js3aEpIbyylAa5I/mgjksuHlqoQX54/fGXxIUY=	pan.baidu.com	/disk',
+  'BDUSS	lVCMFlTbWQ0dXk5Mlp1amV-Z0JYTDBMWWx-dTRHalMwSE9xaEgwczFMSzBOdGRsRUFBQUFBJCQAAAAAAAAAAAEAAAAMT3gzQ2hlbm5pZTUyMDEzMTQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALSpr2W0qa9lT	.baidu.com	/',
+  'ab_jid_BFESS	44db00b133a1e5dc74083468b56a9ffb62d6	.miao.baidu.com	/',
+  'newlogin	1	.baidu.com	/',
+  'BDUSS_BFESS	lVCMFlTbWQ0dXk5Mlp1amV-Z0JYTDBMWWx-dTRHalMwSE9xaEgwczFMSzBOdGRsRUFBQUFBJCQAAAAAAAAAAAEAAAAMT3gzQ2hlbm5pZTUyMDEzMTQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALSpr2W0qa9lT	.baidu.com	/',
+  'H_BDCLCKID_SF	tbPj_D_XJIK3Hnjgq4JShP0ehmT22-usMjAj2hcH0KLKEI32X-Qkb4FSKN5-axniJDQEKfcIWfb1MRjvKPQlqDujbMOJBpoqLn74-p5TtUJD8DnTDMRhXJtWhnbyKMni0DT9-pnjLpQrh459XP68bTkA5bjZKxtq3mkjbPbDfn02eCKuj5AhDjJQjH8s-P-jttoOXRRXtIK_Hnur3f7PXUI8LNDH36vHfRuf0DTD-PJqjqvoWxcAMj8TDnO7ttoy-nn8KbrtafjWqp39DMCWXxL1Db3AKjvMtg3t2R6hbIQoepvoL4oc3Mks0-jdJJQOBKQB0KnGbUQkeq8CQft20b0EeMtjKjLEtRk8oI85JDvDqTrP-trf5DCShUFsa-TRB2Q-XPoO3KJMDfT2bxbZKxIVLNbPhPnbQ6cpBfbgylRp8P3y0bb2DUA1y4vp0qbt0mTxoUJ2Bb3IsxjMqtnWbJ_ebPRi3tQ9QgbMbpQ7tt5W8ncFbT7l5hKpbt-q0x-jLTnhVn0MBCK0hD0wD5-bj6P8qxbXetr0KCOEBn58HJOoDDvX5nocy4LbKxnxJn3LyGnh5MT-WJoThU59MPOl5lKq3-OkWUQ0BecKQR393p3HffQD3noNQfbQ0hO9KMjlLG4LW-nH-R7JOpvtbfnxy--rQRPH-Rv92DQMVU52QqcqEIQHQT3m5-5bbN3ut6IHJR4foDPXJCvbfP0k-P7Eh4_VMfOba46MHD7XVhvn0l7keq8CDRJUbbIpjfjLL6jjJGny2Ijl5t-5e-Q2y5jHhUt_2abHelTyMH7DKIjYQtjpsIJML4DWbT8ULfKLJ4viaKviahoHBMb1slTDBT5h2M4qMxtOLR3pWDTm_q5TtUJMeCnTD-Dhe4tX-NFtJ6FHJf5	.baidu.com	/',
+  'csrfToken	utMX-tXAya1fL8ZN0MiTrWw8	pan.baidu.com	/',
+  'BIDUPSID	1B8A8E08F7A8EBBFB868CF5B6656710E	.baidu.com	/',
+  'BDSFRCVID	KCAOJeC62wDdzJ5fmU2p5ToL1Qft3dvTH6aoCax3r-ZozSqD1IVqEG0PBf8g0KAb-1hKogKKBeOTHFIF_2uxOjjg8UtVJeC6EG0Ptf8g0f5	.baidu.com	/',
+  'STOKEN	bb5780d3186af897f76282f3ae9adf996c0f61b85f1e1c3e2f7fe037b7fa98dd	.pcsdata.baidu.com	/',
+  'BAIDUID	3119C78314041F42E5B5AF134AA0AC0A:FG=1	.baidu.com	/',
+  'H_WISE_SIDS_BFESS	219946_216840_213348_214803_110085_243877_244712_249892_254831_256739_254317_257586_258370_230288_253022_260330_261714_261630_262050_259626_236312_262487_261868_262743_262747_259305_263073_256998_263278_263347_257289_263875_262282_263908_263366_264123_256419_256223_264286_264367_259558_256083_264333_264743_265008_265029_259945_265056_265137_264811_261036_260877_261935_263540_265471_265524_263597_265592_265647_265702_265614_259734_265780_265851_263619_265910_261929_262559_265881_266021_265989_264770_266098_257015_265289_265276_259730_234296_234207_266186_265801_266122_266199_264643_257442_266323_265970_259735_266398_266530_203518_257179_266444_266689_266676	.baidu.com	/',
+  'XFT	XKSbLki89p5T3824hqnoQJbKIAdpjQFhAeBAcSasai0=	pan.baidu.com	/share',
+  'ab_jid	44db00b133a1e5dc74083468b56a9ffb62d6	.miao.baidu.com	/',
+  'BDORZ	B490B5EBF6F3CD402E515D22BCDA1598	.baidu.com	/',
+  'XFI	2ef5d8f1-434d-5f64-b5f9-4fb01393dfca	pan.baidu.com	/share',
+  'PSTM	1672842634	.baidu.com	/',
+  'Hm_lpvt_7a3960b6f067eb0085b7f96ff5e660b0	1706179814	.pan.baidu.com	/',
+  'Hm_lpvt_95fc87a381fad8fcb37d76ac51fefcea	1706159882	.pan.baidu.com	/',
+  'Hm_lvt_7a3960b6f067eb0085b7f96ff5e660b0	1706011169	.pan.baidu.com	/',
+  'Hm_lvt_95fc87a381fad8fcb37d76ac51fefcea	1706159867	.pan.baidu.com	/',
+  'H_WISE_SIDS	219946_216840_213348_214803_110085_243877_244712_249892_254831_256739_254317_257586_258370_230288_253022_260330_261714_261630_262050_259626_236312_262487_261868_262743_262747_259305_263073_256998_263278_263347_257289_263875_262282_263908_263366_264123_256419_256223_264286_264367_259558_256083_264333_264743_265008_265029_259945_265056_265137_264811_261036_260877_261935_263540_265471_265524_263597_265592_265647_265702_265614_259734_265780_265851_263619_265910_261929_262559_265881_266021_265989_264770_266098_257015_265289_265276_259730_234296_234207_266186_265801_266122_266199_264643_257442_266323_265970_259735_266398_266530_203518_257179_266444_266689_266676	.baidu.com	/',
+  'ab_bid	4137cf638fc410c5fb56be32770d32e365d3	.miao.baidu.com	/',
+  'BA_HECTOR	a58g80a50l212g21al8gag2595t8381ir4f6r1t	.baidu.com	/',
+  'XFCS	9D15AB16C6680DC638755FE9221927C6CC55420E109AE2E7CFE7521AA893ACD0	pan.baidu.com	/disk',
+  'PANWEB	1	.pan.baidu.com	/',
+  'XFI	17d3ac50-2f52-c89d-1af2-9844833d676d	pan.baidu.com	/disk',
+]
+
+app.get('/share', async (req, res) => {
+  let page
+  try {
+    const browser = await puppeteer.launch({ executablePath: "C:/Program\ Files/Google/Chrome/Application/chrome.exe", headless: false });
+    page = await browser.newPage();
+    for (const co of pan_cookie) {
+      const part = co.split('	')
+      await page.setCookie({"name": part[0], "value": part[1], "domain": part[2], "path": part[3]})
+    }
+    await page.goto('https://pan.baidu.com/disk/main#/index?category=all&path=%2F%E9%9F%B3%E4%B9%90');
+    
+    const tableSelector = await page.$('table.wp-s-pan-table__body-table tbody>tr:nth-child(1) button.u-button.wp-s-agile-tool-bar__h-action-button')
+
+    await tableSelector?.evaluate(el => el.click());
+    
+    const timeSelector = await page.waitForSelector('label.u-radio.wp-s-radio-group-hoc__item-radio:nth-child(4)')
+    await timeSelector?.evaluate(el => el.click());
+    const shareSelector = await page.waitForSelector('button.u-button.wp-s-dialog-button-hoc.wp-s-share-to-link__create-form-submit--button.u-button--primary.u-button--medium')
+    await shareSelector?.evaluate(el => el.click());
+    const copySelector = await page.waitForSelector('.wp-s-share-to-link__link-info-url.u-input.u-input--small input')
+    const link = await copySelector?.evaluate(el => el.value);
+    const codeSelector = await page.waitForSelector('.wp-s-share-to-link__link-pwd input')
+    const pwd = await codeSelector?.evaluate(el => el.value);
+
+    
+
+
+
+
+
+    const pic = await page.screenshot({ encoding: 'base64' })
+    res.send(`<img src="data:image/jpeg;base64,${pic}" /> <p>${link}</p> <p>${pwd}</p>`)
+  } catch(e:any) {
+    console.log(e)
+    res.send(e.toString())
+  } finally {
+
+    
+  }
+})
 
 
 app.get('/u', async (req, res) => {
   // const cookie = 'PHPSESSID=5dsbimkv6pu4rgnga42rthbsco; __51vcke__K4Eg8SGElFhlWvHA=c02e95a2-c4ca-5172-811e-0ea49a7d1a97; __51vuft__K4Eg8SGElFhlWvHA=1685164511733; _ga_JPNTDP3XJE=GS1.1.1685766273.15.0.1685766273.0.0.0; Hm_lvt_20dbded09f6ac464b84faec7ab3a278b=1691308021; Hm_lpvt_20dbded09f6ac464b84faec7ab3a278b=1693593774; _ga=GA1.1.519116480.1643790333; wordpress_test_cookie=WP%20Cookie%20check; Hm_lvt_7233eaff4ea4aa81ba9933f3a0e42474=1704983825; zh_choose=s; mbt_theme_night=1; __51uvsct__K4Eg8SGElFhlWvHA=121; wordpress_logged_in_c31b215c0db6cdb6478d719de4022ec2=punkhead%7C1707320021%7CM02SU7z2vZqHq9yHpEx1SHPPBPOi5uATaXKFqwk2f3j%7C56450092bbebe6eb525e204c4d262047ddc9e8e6594e0a231766d888b4bb990c; erphp_login_tips=1; mycred_site_visit=1; Hm_lpvt_7233eaff4ea4aa81ba9933f3a0e42474=1706110520; __vtins__K4Eg8SGElFhlWvHA=%7B%22sid%22%3A%20%2222b1297c-7a41-5536-a739-2b7f6a1b325b%22%2C%20%22vd%22%3A%207%2C%20%22stt%22%3A%20109438%2C%20%22dr%22%3A%2066263%2C%20%22expires%22%3A%201706111999999%2C%20%22ct%22%3A%201706110520110%7D; _ga_EYK4RPLNVD=GS1.1.1706110410.59.1.1706110609.0.0.0'
   // const cookie2 = 'zh_choose=s; wordpress_sec_c31b215c0db6cdb6478d719de4022ec2=punkhead%7C1707320021%7CM02SU7z2vZqHq9yHpEx1SHPPBPOi5uATaXKFqwk2f3j%7C508acdd62ae3dab934d235cf6dd83b5a645956538f80917961b82484a9a4f6bb; PHPSESSID=5dsbimkv6pu4rgnga42rthbsco; __51vcke__K4Eg8SGElFhlWvHA=c02e95a2-c4ca-5172-811e-0ea49a7d1a97; __51vuft__K4Eg8SGElFhlWvHA=1685164511733; _ga_JPNTDP3XJE=GS1.1.1685766273.15.0.1685766273.0.0.0; Hm_lvt_20dbded09f6ac464b84faec7ab3a278b=1691308021; Hm_lpvt_20dbded09f6ac464b84faec7ab3a278b=1693593774; _ga=GA1.1.519116480.1643790333; wordpress_test_cookie=WP%20Cookie%20check; Hm_lvt_7233eaff4ea4aa81ba9933f3a0e42474=1704983825; zh_choose=s; mbt_theme_night=1; wordpress_logged_in_c31b215c0db6cdb6478d719de4022ec2=punkhead%7C1707320021%7CM02SU7z2vZqHq9yHpEx1SHPPBPOi5uATaXKFqwk2f3j%7C56450092bbebe6eb525e204c4d262047ddc9e8e6594e0a231766d888b4bb990c; erphp_login_tips=1; mycred_site_visit=1; __vtins__K4Eg8SGElFhlWvHA=%7B%22sid%22%3A%20%228e70dd77-5e13-5c2a-82de-cfcf3ae00709%22%2C%20%22vd%22%3A%201%2C%20%22stt%22%3A%200%2C%20%22dr%22%3A%200%2C%20%22expires%22%3A%201706113878450%2C%20%22ct%22%3A%201706112078450%7D; __51uvsct__K4Eg8SGElFhlWvHA=122; Hm_lpvt_7233eaff4ea4aa81ba9933f3a0e42474=1706112079; _ga_EYK4RPLNVD=GS1.1.1706110410.59.1.1706112250.0.0.0'
   try {
-    const browser = await puppeteer.launch({ executablePath: "C:/Program\ Files/Google/Chrome/Application/chrome.exe", headless: true });
+    const browser = await puppeteer.launch({ executablePath: "C:/Program\ Files/Google/Chrome/Application/chrome.exe", headless: false });
     // const browser = await puppeteer.launch({ executablePath: "C:/Program\ Files\ (x86)/Google/Chrome/Application/chrome.exe", headless: "new" });
     // const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
@@ -283,23 +370,30 @@ app.get('/u', async (req, res) => {
     await page.setCookie({"name": "__51vcke__K4Eg8SGElFhlWvHA", "value": "108199df-bd58-5d56-b152-85bdb47b8278", "domain": "www.lgych.com",  "path": "/"})
 
 
-    await page.goto('https://www.lgych.com/wp-content/plugins/erphpdown/download.php?postid=66099&index=0');
+    // await page.goto('https://www.lgych.com/wp-content/plugins/erphpdown/download.php?postid=66099&index=0');
+    await page.goto('https://pan.baidu.com/share/init?surl=Hpjdd3otSQ7lC9hpPQPazQ&pwd=3p21');
     // await page.goto('https://www.lgych.com/42671.html');
     // await page.goto('https://moyin520.com/category/blu-ray/jp/page/3/');
     // Set screen size
 
 
     // Type into search box
-    // await page.type('.search-box__input', 'automate beyond recorder');
-    const codeSelector = await page.waitForSelector('.erphpdown-copy');
-    const code = await codeSelector?.evaluate(el => el.getAttribute('data-clipboard-text'))
+
+    // const codeSelector = await page.waitForSelector('.erphpdown-copy');
+    // const code = await codeSelector?.evaluate(el => el.getAttribute('data-clipboard-text'))
+    // const searchResultSelector = await page.waitForSelector('.erphpdown-msg a');
+    // const link = await searchResultSelector?.evaluate(el => el.href);
+    // if (!link) throw Error('no link')
+    // await page.goto(link);
 
     // Wait and click on first result
-    const searchResultSelector = await page.waitForSelector('.erphpdown-msg a');
-    // await page.locator(searchResultSelector).click();
-    const link = await searchResultSelector?.evaluate(el => el.href);
-    if (!link) throw Error('no link')
-    await page.goto(link);
+    // const submitSelector = await page.waitForSelector('#submitBtn');
+    // if (!submitSelector) throw Error('no #submitBtn')
+    await page.locator('#submitBtn').click();
+
+    const fileSelector = await page.waitForSelector('div.file-name a.filename')
+    const filename = await fileSelector?.evaluate(el => el.textContent);
+
     // await page.click(searchResultSelector);
 
     // await page.type('input.DocSearch-Input', 'window', { delay: 100 });
@@ -320,14 +414,15 @@ app.get('/u', async (req, res) => {
     //   '.erphpdown-msg a'
     // )
 
-    // const panLink = await selector?.evaluate(el => el.href);
 
+    const pic = await page.screenshot({ encoding: 'base64' })
+    const url = page.url()
+    // res.send(`<img src="data:image/jpeg;base64,${pic}" /><p>${url}</p><p>${code}</p>`)
 
     // Print the full title
     // console.log('The title of this blog post is "%s".', fullTitle);
-    const pic = await page.screenshot({ encoding: 'base64' })
-    const url = page.url()
-    res.send(`<img src="data:image/jpeg;base64,${pic}" /><p>${url}</p><p>${code}</p>`)
+    
+    res.send(`<img src="data:image/jpeg;base64,${pic}" /><p>${url}</p><p>filename: ${filename}</p>`)
     // await browser.close();
   } catch (e: any) {
     res.send(e.toString())
@@ -357,18 +452,6 @@ app.get('/list', async(req, res) => {
       await collection.insertMany(list, {ordered: false})
       pageCount++
     }
-
-    // console.log('goto page number:', pageCount)
-    //   const list = await getList(pageCount, cate)
-    //   const collection = MongodbClient.db('original').collection(cate)
-    //   // await collection.createIndex({id: 1}, {unique: true})
-    //   await collection.insertMany(list, {ordered: false})
-    
-   
-
-    // res.json({pageCount})
-
-
 
   } catch(e:any) {
     // console.log(e)
