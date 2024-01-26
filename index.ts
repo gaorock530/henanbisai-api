@@ -306,7 +306,7 @@ app.get('/share', async (req, res) => {
       const part = co.split('	')
       await page.setCookie({"name": part[0], "value": part[1], "domain": part[2], "path": part[3]})
     }
-    await page.goto('https://pan.baidu.com/disk/main#/index?category=all&path=%2F%E9%9F%B3%E4%B9%90');
+    await page.goto('https://pan.baidu.com/disk/main#/index?category=all&path=%2Ftransfer%2Fblu-ray%2F1');
     
     const tableSelector = await page.$('table.wp-s-pan-table__body-table tbody>tr:nth-child(1) button.u-button.wp-s-agile-tool-bar__h-action-button')
 
