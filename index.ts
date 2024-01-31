@@ -11,23 +11,24 @@ import parse from 'node-html-parser'
 import puppeteer from 'puppeteer-core'
 import https from 'https'
 import axios from 'axios'
-import MongodbClient from './database'
-import pan_cookie from './cookies/panCookie'
+import MongodbClient from '@/database'
+import checkPassword from './src/middleware/checkPassword';
+import pan_cookie from './src/cookies/panCookie'
 
 //For env File 
 dotenv.config();
 
 const app: Application = express();
 
-
+console.log({test: process.env.TEST})
 
 
 const PORT = process.env.PORT || 5001
 
 const server = https.createServer(
   {
-    key: fs.readFileSync(__dirname + '/ssl/code.key'),
-    cert: fs.readFileSync(__dirname + '/ssl/code.crt'),
+    key: fs.readFileSync(__dirname + '/src/ssl/code.key'),
+    cert: fs.readFileSync(__dirname + '/src/ssl/code.crt'),
   },
   app
 )
@@ -54,6 +55,7 @@ app.use(express.static(__dirname + '/uploads'))
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(checkPassword)
 
 /**
  * @description All WebSocket events logic
@@ -266,13 +268,9 @@ app.get('/share', async (req, res) => {
       const part = co.split('	')
       await page.setCookie({ "name": part[0], "value": part[1], "domain": part[2], "path": part[3] })
     }
-<<<<<<< HEAD
-    await page.goto('https://pan.baidu.com/disk/main#/index?category=all&path=%2Ftransfer%2Fblu-ray%2F1');
-    
-=======
-    await page.goto('https://pan.baidu.com/disk/main#/index?category=all&path=%2F%E9%9F%B3%E4%B9%90');
 
->>>>>>> b908c0eb238debf8a237bdb8f81162c28823d1ce
+    await page.goto('https://pan.baidu.com/disk/main#/index?category=all&path=%2Ftransfer%2Fblu-ray%2F1');
+
     const tableSelector = await page.$('table.wp-s-pan-table__body-table tbody>tr:nth-child(1) button.u-button.wp-s-agile-tool-bar__h-action-button')
 
     await tableSelector?.evaluate(el => el.click());
