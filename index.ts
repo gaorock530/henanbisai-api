@@ -29,8 +29,8 @@ const PORT = process.env.PORT || 5001
 
 const server = https.createServer(
   {
-    key: fs.readFileSync(__dirname + '/src/ssl/code.key'),
-    cert: fs.readFileSync(__dirname + '/src/ssl/code.crt'),
+    key: fs.readFileSync(__dirname + '/assets/ssl/code.key'),
+    cert: fs.readFileSync(__dirname + '/assets/ssl/code.crt'),
   },
   app
 )
@@ -289,7 +289,7 @@ async function parseDetailPage(url: string, free: boolean) {
     // get title & tags
     let title = dom.querySelector('.article-title')?.innerText
 
-    let year = null, bad = null
+    let year:string = '', bad:string|boolean = false
 
     const sYear = title?.match(/[\[?](\d{4})[\]?]/)
     if (sYear && sYear[0]) {
@@ -299,7 +299,7 @@ async function parseDetailPage(url: string, free: boolean) {
     }
 
     const tag = title?.match(/[\[\《].+[\]\》]/ig)
-    let size = null, tags
+    let size:string = '', tags
     if (tag) {
       title = title?.replace(tag[0], '')
       const lis = tag[0].slice(1, -1).split(' ')
@@ -347,7 +347,7 @@ async function parseDetailPage(url: string, free: boolean) {
     let photos = dom.querySelectorAll('.article-content img')
     const urls = []
     for (const img of photos) {
-      if (img.getAttribute('src')) urls.push(img.getAttribute('src'))
+      if (img.getAttribute('src')) urls.push(img.getAttribute('src') as never)
     }
 
 
@@ -415,7 +415,7 @@ async function getList(page: number, cate: string = 'bluray') {
     const dom = parse(htmlRes.data)
     const list = dom.querySelectorAll('div.post')
 
-    const posts = []
+    const posts: any[] = []
     for (const li of list) {
       const id = li.getAttribute('data-id')
       const root = li.querySelector('div.img a')
