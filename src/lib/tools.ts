@@ -37,3 +37,35 @@ export function isPromotion(resource: Resource): number | false {
 export function isValidParam(str: string) {
   return typeof str === 'undefined' || str.length <= 1000;
 }
+
+export function checkPass(password: string) {
+  let secureLevel = 0;
+  // Minimum eight characters, at least one letter and one number:
+  if (password.match(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,128}$/)) secureLevel = 1;
+  // Minimum eight characters, at least one letter, one number and one special character
+  if (
+    password.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,128}$/) ||
+    // Minimum eight characters, at least one uppercase letter, one lowercase letter and one number
+    password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,128}$/)
+  )
+    secureLevel = 2;
+  // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special characte
+  // /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,128}$/
+  if (
+    password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[A-Za-z\d\W]{8,128}$/) ||
+    // Minimum eight and maximum 10 characters, at least one uppercase letter, one lowercase letter, one number and one special character
+    password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[A-Za-z\d\W]{8,128}$/)
+  )
+    secureLevel = 3;
+  return secureLevel;
+}
+
+export function generateTradeNo() {
+  const date = new Date();
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth().toString().padStart(2, '0');
+  const day = date.getUTCDate().toString().padStart(2, '0');
+  const mid = String(date.getTime()).slice(1);
+  const rand = String(Math.random()).slice(-6);
+  return `${year}${month}${day}${mid}${rand}`;
+}

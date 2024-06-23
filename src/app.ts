@@ -6,7 +6,7 @@ import DB from '@instance/database';
 import { NODE_ENV, PORT } from '@config';
 import { RoutesInterface } from '@interface/router.interface';
 import errorMiddleware from '@/middleware/error.middleware';
-import commonMiddleware from '@/middleware/common.middleware';
+// import commonMiddleware from '@/middleware/common.middleware';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -50,10 +50,10 @@ export default class App {
   private initializeMiddlewares() {
     this.app.use(cors());
     // this.app.use(cors({ origin: ORIGIN, credentials: true, allowedHeaders: 'x-sign,x-sid' }));
-    this.app.use(helmet());
+    // this.app.use(helmet());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(cookieParser());
+    // this.app.use(cookieParser());
     this.app.set('x-powered-by', false);
     // check totp for every request
     // define it yourself

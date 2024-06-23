@@ -19,6 +19,7 @@
   "author": "Magic",
   "license": "ISC",
   "dependencies": {
+    "alipay-sdk": "^4.10.0",
     "axios": "^1.6.5",
     "bcrypt": "^5.1.1",
     "class-validator": "^0.14.1",
