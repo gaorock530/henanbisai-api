@@ -1,0 +1,24 @@
+export type UserId = string;
+export type ResourceId = string;
+export type ImageId = string;
+export type ImageFileId = string;
+export type UrlString = string;
+export type FormatLevel1 = 'BDISO' | 'BDMV';
+export type FormatLevel2 = 'DVDISO';
+export type FormatLevel3 = 'REMUX' | 'BDRiP' | 'WEB-DL' | 'HDTV' | 'TS' | 'M2TS' | 'MP4';
+export type FormatLevel4 = 'ProRes' | 'HiRes' | 'Master';
+export type FormatLevel5 = 'WAV' | 'FLAC' | 'APE';
+export type FormatLevel6 = 'MP3' | 'ACC' | '其他';
+export type FormatAll = FormatLevel1 | FormatLevel2 | FormatLevel3 | FormatLevel4 | FormatLevel5 | FormatLevel6;
+export type VideoCategory = '大陆演唱会' | '香港演唱会' | '台湾演唱会' | '欧美演唱会' | '日本演唱会' | '韩国演唱会' | '蓝光演示碟' | '蓝光音频碟';
+export type AudioCategory = '华语音乐' | '欧美音乐' | '日本音乐' | '韩国音乐';
+export type MvCategory = '华语MV' | '欧美MV' | '日本MV' | '韩国MV' | 'Music Video';
+export type MovieCategory = '华语电影' | '欧美电影' | '日本电影' | '韩国电影';
+export type RoleTypes = 'user:normal' | 'user:month' | 'user:year' | 'user:forever' | 'admin:normal' | 'admin:owner';
+
+export type PropertyOptions = 'artist' | 'genre' | 'tag';
+export type RewardActions = 'publish' | 'purchase' | 'signin' | 'register' | 'userinfo' | 'sales' | 'promotion';
+export type ChargeActions = 'avatar' | 'exchange';
+export type PointsActions = 'charge' | 'reward' | 'exchange';
+export type CoinsActions = 'purchase';
+export type MessageActions = 'warn' | 'reply';
