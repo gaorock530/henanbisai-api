@@ -34,7 +34,7 @@ export async function jwtVerify(jwt: string, sid: string) {
   }
 }
 
-export async function generateSign(payload: jose.JWTPayload, seconds = 5 * 60, jwtsecret?: string) {
+export async function generateSign(seconds = 5 * 60, payload: jose.JWTPayload, jwtsecret?: string) {
   try {
     const secret = jose.base64url.decode(jwtsecret || process.env.TOTP_SECRET);
     console.log({ TOTP: process.env.TOTP_SECRET, secret });

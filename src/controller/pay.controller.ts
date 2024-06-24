@@ -17,55 +17,63 @@ const alipaySdk = new AlipaySdk({
   gateway: 'https://openapi.alipay.com/gateway.do',
 });
 
+// function getProduct(usage: string) {
+//   const title = 'HDlovers-';
+//   if (usage === 'topup') return title + '充值';
+//   if (usage === 'month') return title + '包月VIP';
+//   if (usage === 'year') return title + '包年VIP';
+//   if (usage === 'forever') return title + '永久VIP';
+//   return null;
+// }
+
 class PayController {
   private payService = new PayService();
 
-  public alipay = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const sign = req.query['sign']?.toString();
-      // const userId = req.query['userId']?.toString();
-      // const usage = req.query['usage']?.toString();
-      // const amount = Number(req.query['amount']?.toString());
-      // need to do a validation
-      /// todo ...
+  // public alipay = async (req: Request, res: Response, next: NextFunction) => {
+  //   try {
+  //     const sign = req.query['sign']?.toString();
+  //     if (!sign) throw new HttpException(400, 'sign error');
+  //     const newSign = await generateSign(
+  //       {
+  //         userId: '123123',
+  //         usage: 'year',
+  //         amount: '0.1',
+  //       },
+  //       160,
+  //       PAY_SIGN_TOKEN,
+  //     );
+  //     if (!newSign) throw new HttpException(400, 'invalid sign');
+  //     console.log({ newSign });
+  //     const transactionId = generateTradeNo();
 
-      // if (!userId || !usage || isNaN(amount)) throw new HttpException(400, 'url error');
-      if (!sign) throw new HttpException(400, 'sign error');
-      const newSign = await generateSign(
-        {
-          userId: '123123',
-          usage: 'topup',
-          amount: '0.01',
-        },
-        60,
-        PAY_SIGN_TOKEN,
-      );
-      if (!newSign) throw new HttpException(400, 'invalid sign');
-      console.log({ newSign });
-      const transactionId = generateTradeNo();
+  //     const jwtDecrypted = await verifySign(sign, PAY_SIGN_TOKEN);
+  //     if (!jwtDecrypted) throw new HttpException(401);
+  //     const { userId, usage, amount } = jwtDecrypted.payload;
+  //     if (!userId) throw new HttpException(400, 'userId error');
+  //     if (!usage || (usage !== 'topup' && usage !== 'month' && usage !== 'year' && usage !== 'forever')) throw new HttpException(400, 'usage error');
+  //     const checkingAmount = Number(amount);
+  //     if (isNaN(checkingAmount) || checkingAmount <= 0) throw new HttpException(400, 'amount error');
+  //     const subject = getProduct(usage);
+  //     if (!subject) throw new HttpException(400, 'subject error');
 
-      const jwtDecrypted = await verifySign(sign, PAY_SIGN_TOKEN);
-      3;
-      if (!jwtDecrypted) throw new HttpException(401);
-      // const result = alipaySdk.pageExec('alipay.trade.page.pay', 'POST', {
-      //   bizContent: {
-      //     out_trade_no: transactionId,
-      //     total_amount: '0.01',
-      //     subject: 'HDlovers-包月VIP',
-      //     product_code: 'FAST_INSTANT_TRADE_PAY',
-      //     qr_pay_mode: 1,
-      //     qrcode_width: 200,
-      //   },
-      //   returnUrl: 'https://api.henanbisai.com/pay/alipay_callback?userId=asd123123234123&usage=topup',
-      // });
+  //     const result = alipaySdk.pageExec('alipay.trade.page.pay', 'POST', {
+  //       bizContent: {
+  //         out_trade_no: transactionId,
+  //         total_amount: amount,
+  //         subject,
+  //         product_code: 'FAST_INSTANT_TRADE_PAY',
+  //         qr_pay_mode: 5,
+  //         qrcode_width: 200,
+  //       },
+  //       returnUrl: `https://api.henanbisai.com/pay/alipay_callback?userId=asd123123234123&usage=topup`,
+  //     });
 
-      // res.send(result);
-      res.send(jwtDecrypted.payload);
-    } catch (error) {
-      log({ error });
-      next(error);
-    }
-  };
+  //     res.send(result);
+  //   } catch (error) {
+  //     log({ error });
+  //     next(error);
+  //   }
+  // };
 
   public alipay_callback = async (req: Request, res: Response, next: NextFunction) => {
     try {

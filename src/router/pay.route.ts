@@ -3,7 +3,7 @@ import PayController from '@/controller/pay.controller';
 import { RoutesInterface } from '@interface/router.interface';
 // import checkSign from '@middleware/auth.middleware';
 // import checkUser from '@/middleware/user.middleware';
-import { limiter } from '@/lib/limiter';
+// import { limiter } from '@/lib/limiter';
 
 class PayRoute implements RoutesInterface {
   public path = '/pay';
@@ -15,8 +15,8 @@ class PayRoute implements RoutesInterface {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/alipay`, limiter(3, 60), this.payController.alipay);
-    this.router.get(`${this.path}/alipay_callback`, this.payController.alipay);
+    // this.router.get(`${this.path}/alipay`, limiter(3, 60), this.payController.alipay);
+    this.router.get(`${this.path}/alipay_callback`, this.payController.alipay_callback);
   }
 }
 
