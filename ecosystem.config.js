@@ -21,7 +21,7 @@ module.exports = {
       error: './logs/error.log', // pm2 error log file
       env: {
         // environment variable
-        PORT: 5001,
+        PORT: 5551,
         NODE_ENV: 'production',
       },
     },
@@ -41,7 +41,7 @@ module.exports = {
       error: './logs/error.log', // pm2 error log file
       env: {
         // environment variable
-        PORT: 3001,
+        PORT: 5551,
         NODE_ENV: 'development',
       },
     },
