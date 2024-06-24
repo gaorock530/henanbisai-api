@@ -34,9 +34,9 @@ export async function jwtVerify(jwt: string, sid: string) {
   }
 }
 
-export async function generateSign(seconds = 5 * 60, payload: jose.JWTPayload) {
+export async function generateSign(payload: jose.JWTPayload, seconds = 5 * 60, jwtsecret?: string) {
   try {
-    const secret = jose.base64url.decode(process.env.TOTP_SECRET);
+    const secret = jose.base64url.decode(jwtsecret || process.env.TOTP_SECRET);
     console.log({ TOTP: process.env.TOTP_SECRET, secret });
     const jwt = await new jose.EncryptJWT(payload)
       .setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' })
@@ -47,14 +47,13 @@ export async function generateSign(seconds = 5 * 60, payload: jose.JWTPayload) {
       .encrypt(secret);
     return jwt;
   } catch (e) {
-    console.error(e);
-    return null;
+    throw new HttpException(400, 'invalid sign action');
   }
 }
 
-export async function verifySign(sign: string) {
+export async function verifySign(sign: string, jwtsecret?: string) {
   try {
-    const secret = jose.base64url.decode(process.env.TOTP_SECRET);
+    const secret = jose.base64url.decode(jwtsecret || process.env.TOTP_SECRET);
 
     const { payload, protectedHeader } = await jose.jwtDecrypt(sign, secret, {
       issuer: 'hdlovers.com',
@@ -63,6 +62,7 @@ export async function verifySign(sign: string) {
     log({ payload, protectedHeader });
     return { payload, protectedHeader };
   } catch (e) {
-    throw new HttpException(401, 'invalid token');
+    log(e.toString());
+    return null;
   }
 }

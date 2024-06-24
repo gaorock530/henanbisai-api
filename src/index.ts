@@ -8,7 +8,7 @@ app.start();
 
 console.log('Start Date:', new Date());
 console.log({
-  'process.env.JWT_SECRET': process.env.JWT_SECRET,
-  'process.env.SIGN_SECRET': process.env.SIGN_SECRET,
-  'process.env.TOTP_SECRET': process.env.TOTP_SECRET,
+  'process.env.PAY_SIGN_TOKEN': process.env.PAY_SIGN_TOKEN,
+  // 'process.env.SIGN_SECRET': process.env.SIGN_SECRET,
+  // 'process.env.TOTP_SECRET': process.env.TOTP_SECRET,
 });

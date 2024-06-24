@@ -5,6 +5,8 @@ import { generateTradeNo } from '@/lib/tools';
 import log from '@/lib/log';
 import { AlipaySdk } from 'alipay-sdk';
 import Transaction from '@/classes/Transcation';
+import { generateSign, verifySign } from '@/lib/jwt';
+import { PAY_SIGN_TOKEN } from '@/config';
 
 const alipaySdk = new AlipaySdk({
   appId: '2021004153648869',
@@ -20,28 +22,45 @@ class PayController {
 
   public alipay = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userId = req.query['userId']?.toString();
-      const usage = req.query['usage']?.toString();
-      const amount = Number(req.query['amount']?.toString());
+      const sign = req.query['sign']?.toString();
+      // const userId = req.query['userId']?.toString();
+      // const usage = req.query['usage']?.toString();
+      // const amount = Number(req.query['amount']?.toString());
       // need to do a validation
       /// todo ...
 
-      if (!userId || !usage || isNaN(amount)) throw new HttpException(400, 'url error');
+      // if (!userId || !usage || isNaN(amount)) throw new HttpException(400, 'url error');
+      if (!sign) throw new HttpException(400, 'sign error');
+      const newSign = await generateSign(
+        {
+          userId: '123123',
+          usage: 'topup',
+          amount: '0.01',
+        },
+        60,
+        PAY_SIGN_TOKEN,
+      );
+      if (!newSign) throw new HttpException(400, 'invalid sign');
+      console.log({ newSign });
       const transactionId = generateTradeNo();
 
-      const result = alipaySdk.pageExec('alipay.trade.page.pay', 'POST', {
-        bizContent: {
-          out_trade_no: transactionId,
-          total_amount: '0.01',
-          subject: 'HDlovers-包月VIP',
-          product_code: 'FAST_INSTANT_TRADE_PAY',
-          qr_pay_mode: 1,
-          qrcode_width: 200,
-        },
-        returnUrl: 'https://api.henanbisai.com/pay/alipay_callback?userId=asd123123234123&usage=topup',
-      });
+      const jwtDecrypted = await verifySign(sign, PAY_SIGN_TOKEN);
+      3;
+      if (!jwtDecrypted) throw new HttpException(401);
+      // const result = alipaySdk.pageExec('alipay.trade.page.pay', 'POST', {
+      //   bizContent: {
+      //     out_trade_no: transactionId,
+      //     total_amount: '0.01',
+      //     subject: 'HDlovers-包月VIP',
+      //     product_code: 'FAST_INSTANT_TRADE_PAY',
+      //     qr_pay_mode: 1,
+      //     qrcode_width: 200,
+      //   },
+      //   returnUrl: 'https://api.henanbisai.com/pay/alipay_callback?userId=asd123123234123&usage=topup',
+      // });
 
-      res.send(result);
+      // res.send(result);
+      res.send(jwtDecrypted.payload);
     } catch (error) {
       log({ error });
       next(error);
