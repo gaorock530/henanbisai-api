@@ -7,9 +7,9 @@ import { NODE_ENV, PORT } from '@config';
 import { RoutesInterface } from '@interface/router.interface';
 import errorMiddleware from '@/middleware/error.middleware';
 // import commonMiddleware from '@/middleware/common.middleware';
-import cookieParser from 'cookie-parser';
+// import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import helmet from 'helmet';
+// import helmet from 'helmet';
 
 export default class App {
   public app: express.Application;

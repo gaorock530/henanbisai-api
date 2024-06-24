@@ -7,7 +7,7 @@
 module.exports = {
   apps: [
     {
-      name: 'hdlovers-prod', // pm2 start App name
+      name: 'pay-prod', // pm2 start App name
       script: 'dist/index.js',
       exec_mode: 'cluster', // 'cluster' or 'fork'
       instance_var: 'INSTANCE_ID', // instance variable
@@ -26,7 +26,7 @@ module.exports = {
       },
     },
     {
-      name: 'hdlovers-dev', // pm2 start App name
+      name: 'pay-dev', // pm2 start App name
       script: 'ts-node', // ts-node
       args: '-r tsconfig-paths/register --transpile-only src/index.ts', // ts-node args
       exec_mode: 'cluster', // 'cluster' or 'fork'

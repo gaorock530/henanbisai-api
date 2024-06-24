@@ -77,10 +77,13 @@ class PayController {
 
   public alipay_callback = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const OUT_TRADE_NO = req.query['out_trade_no'];
-      const userId = req.query['userId'];
-      const usage = req.query['usage'];
-      if (!OUT_TRADE_NO || !userId || !usage) throw Error('url error');
+      const OUT_TRADE_NO = req.query['out_trade_no']?.toString();
+      const userId = req.query['userId']?.toString();
+      const usage = req.query['usage']?.toString();
+      const amount = req.query['amount']?.toString();
+      const redirect_link = req.query['redirect']?.toString();
+
+      if (!OUT_TRADE_NO || !userId || !usage || !amount || !redirect_link) throw Error('url error');
 
       const result = await alipaySdk.exec('alipay.trade.query', {
         bizContent: {
@@ -103,7 +106,7 @@ class PayController {
       });
       console.log(transaction);
 
-      res.redirect(301, 'http://localhost:3000/user/personal?tab=topup');
+      res.redirect(301, redirect_link);
     } catch (error) {
       log({ error });
       next(error);
