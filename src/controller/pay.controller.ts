@@ -27,17 +27,14 @@ const alipaySdk = new AlipaySdk({
 // }
 
 class PayController {
-  private payService = new PayService();
+  // private payService = new PayService();
 
   public alipay_callback = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const OUT_TRADE_NO = req.query['out_trade_no']?.toString();
-      const userId = req.query['userId']?.toString();
-      const usage = req.query['usage']?.toString();
-      const amount = req.query['amount']?.toString();
       const redirect_link = req.query['redirect']?.toString();
 
-      if (!OUT_TRADE_NO || !userId || !usage || !amount || !redirect_link) throw Error('url error');
+      if (!OUT_TRADE_NO || !redirect_link) throw Error('url error');
 
       const result = await alipaySdk.exec('alipay.trade.query', {
         bizContent: {
