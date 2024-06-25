@@ -36,7 +36,7 @@ export default class App {
     //   this.app
     // )
     this.app.get('/', (req, res) => {
-      res.status(401);
+      res.status(401).end();
     });
 
     this.app.listen(this.port, () => {

@@ -17,15 +17,6 @@ const alipaySdk = new AlipaySdk({
   gateway: 'https://openapi.alipay.com/gateway.do',
 });
 
-// function getProduct(usage: string) {
-//   const title = 'HDlovers-';
-//   if (usage === 'topup') return title + '充值';
-//   if (usage === 'month') return title + '包月VIP';
-//   if (usage === 'year') return title + '包年VIP';
-//   if (usage === 'forever') return title + '永久VIP';
-//   return null;
-// }
-
 class PayController {
   // private payService = new PayService();
 
