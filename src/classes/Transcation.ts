@@ -12,7 +12,7 @@ export default class Transaction {
   usage: 'normal' | 'month' | 'year' | 'forever';
   status: 'start' | 'paid' | 'error';
 
-  constructor({ topupBy, transactionId, paymentDetail, amount, platform, usage }) {
+  constructor({ topupBy, transactionId, paymentDetail, amount, amountString, platform, usage }) {
     this.id = v4();
     this.topupDate = new Date();
     this.topupBy = topupBy;

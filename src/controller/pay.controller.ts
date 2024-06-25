@@ -29,52 +29,6 @@ const alipaySdk = new AlipaySdk({
 class PayController {
   private payService = new PayService();
 
-  // public alipay = async (req: Request, res: Response, next: NextFunction) => {
-  //   try {
-  //     const sign = req.query['sign']?.toString();
-  //     if (!sign) throw new HttpException(400, 'sign error');
-  //     const newSign = await generateSign(
-  //       {
-  //         userId: '123123',
-  //         usage: 'year',
-  //         amount: '0.1',
-  //       },
-  //       160,
-  //       PAY_SIGN_TOKEN,
-  //     );
-  //     if (!newSign) throw new HttpException(400, 'invalid sign');
-  //     console.log({ newSign });
-  //     const transactionId = generateTradeNo();
-
-  //     const jwtDecrypted = await verifySign(sign, PAY_SIGN_TOKEN);
-  //     if (!jwtDecrypted) throw new HttpException(401);
-  //     const { userId, usage, amount } = jwtDecrypted.payload;
-  //     if (!userId) throw new HttpException(400, 'userId error');
-  //     if (!usage || (usage !== 'topup' && usage !== 'month' && usage !== 'year' && usage !== 'forever')) throw new HttpException(400, 'usage error');
-  //     const checkingAmount = Number(amount);
-  //     if (isNaN(checkingAmount) || checkingAmount <= 0) throw new HttpException(400, 'amount error');
-  //     const subject = getProduct(usage);
-  //     if (!subject) throw new HttpException(400, 'subject error');
-
-  //     const result = alipaySdk.pageExec('alipay.trade.page.pay', 'POST', {
-  //       bizContent: {
-  //         out_trade_no: transactionId,
-  //         total_amount: amount,
-  //         subject,
-  //         product_code: 'FAST_INSTANT_TRADE_PAY',
-  //         qr_pay_mode: 5,
-  //         qrcode_width: 200,
-  //       },
-  //       returnUrl: `https://api.henanbisai.com/pay/alipay_callback?userId=asd123123234123&usage=topup`,
-  //     });
-
-  //     res.send(result);
-  //   } catch (error) {
-  //     log({ error });
-  //     next(error);
-  //   }
-  // };
-
   public alipay_callback = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const OUT_TRADE_NO = req.query['out_trade_no']?.toString();
@@ -94,19 +48,20 @@ class PayController {
 
       if (result.code !== '10000' || result.msg !== 'Success') throw Error('pay error');
 
-      // need todo
-      // update user database
-      const transaction = new Transaction({
-        topupBy: userId,
-        transactionId: result.outTradeNo,
-        paymentDetail: result,
-        amount: result.buyerPayAmount,
-        platform: 'alipay',
-        usage,
-      });
-      console.log(transaction);
-
       res.redirect(301, redirect_link);
+    } catch (error) {
+      log({ error });
+      next(error);
+    }
+  };
+
+  public alipay_notice = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const body = req.body;
+      const display = { body, url: req.url };
+      console.log(display);
+
+      res.send(display);
     } catch (error) {
       log({ error });
       next(error);
