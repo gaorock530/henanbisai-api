@@ -43,6 +43,15 @@ class PayController {
     }
   };
 
+  public wepay_callback = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      res.send({ wepay_callback: 'ok', query: JSON.stringify(req.query), url: req.url });
+    } catch (error) {
+      log({ error });
+      next(error);
+    }
+  };
+
   public alipay_notice = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const body = req.body;
