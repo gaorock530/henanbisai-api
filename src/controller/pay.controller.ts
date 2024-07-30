@@ -7,7 +7,7 @@ import { AlipaySdk } from 'alipay-sdk';
 import Transaction from '@/classes/Transcation';
 import { generateSign, verifySign } from '@/lib/jwt';
 import { PAY_SIGN_TOKEN } from '@/config';
-import wepayDecrypt from '@/lib/wepayDecrypt';
+import { Formatter, Rsa, Aes } from 'wechatpay-axios-plugin';
 
 const alipaySdk = new AlipaySdk({
   appId: '2021004153648869',
@@ -48,7 +48,9 @@ class PayController {
     try {
       console.log({ wepay_callback: req.body });
       try {
-        const data = wepayDecrypt(req.body.resource.ciphertext, req.body.resource.nonce, req.body.resource.associated_data);
+        const apiv3Key = 'asdlkj123Akkj321Poaskqw1278DasFB';
+        const { nonce, ciphertext, associated_data } = req.body.resource;
+        const data = JSON.parse(Aes.AesGcm.decrypt(nonce, apiv3Key, ciphertext, associated_data));
         console.log({ data });
       } catch (e) {
         console.log(e);
