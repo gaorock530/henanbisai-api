@@ -45,7 +45,8 @@ class PayController {
 
   public wepay_callback = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.send({ wepay_callback: 'ok', query: JSON.stringify(req.query), url: req.url });
+      console.log({ wepay_callback: req.body });
+      res.status(200);
     } catch (error) {
       log({ error });
       next(error);
