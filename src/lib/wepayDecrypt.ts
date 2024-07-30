@@ -1,5 +1,5 @@
-import { createDecipheriv } from 'node:crypto';
-// const { createDecipheriv } = require('node:crypto');
+// import { createDecipheriv } from 'node:crypto';
+const { createDecipheriv } = require('node:crypto');
 
 export default function wepayDecrypt(ciphertext: string, key: string, nonce: string, associated_data: string) {
   const encrypted = Buffer.from(ciphertext, 'base64');
