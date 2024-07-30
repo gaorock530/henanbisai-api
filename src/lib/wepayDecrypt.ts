@@ -30,7 +30,7 @@ export default function wepayDecrypt(ciphertext: string, nonce: string, associat
   // AES 256 GCM Mode
   const decipher = _crypto.createDecipheriv('aes-256-gcm', key, nonce);
   decipher.setAuthTag(tag);
-  decipher.setAAD(Buffer.from(associated_data));
+  // decipher.setAAD(Buffer.from(associated_data));
 
   // encrypt the given text
   const decrypted = decipher.update(text, 'binary', 'utf8') + decipher.final('utf8');
