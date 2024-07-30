@@ -1,13 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { HttpException } from '@lib/HttpException';
-import PayService from '@/service/pay.service';
-import { generateTradeNo } from '@/lib/tools';
 import log from '@/lib/log';
 import { AlipaySdk } from 'alipay-sdk';
-import Transaction from '@/classes/Transcation';
-import { generateSign, verifySign } from '@/lib/jwt';
-import { PAY_SIGN_TOKEN } from '@/config';
-import { Formatter, Rsa, Aes } from 'wechatpay-axios-plugin';
+import { Aes } from 'wechatpay-axios-plugin';
+import axios from 'axios';
 
 const alipaySdk = new AlipaySdk({
   appId: '2021004153648869',
@@ -52,10 +47,38 @@ class PayController {
         const { nonce, ciphertext, associated_data } = req.body.resource;
         const data = JSON.parse(Aes.AesGcm.decrypt(nonce, apiv3Key, ciphertext, associated_data));
         console.log({ data });
+        if (!data) throw Error('decrypt error');
+        const notifyServer = await axios.get(`https://api.hdlovers.com/pay/check?out_trade_no=${data.out_trade_no}&sid=henanbisai`);
+        console.log({ notifyServer });
+        if (notifyServer.status === 200) res.status(200).end();
+        else res.status(notifyServer.status).end();
+        /**
+         * {
+              data: {
+                mchid: '1680223610',
+                appid: 'wxe82604d9a68ca8cf',
+                out_trade_no: '20240630722344392767975849',
+                transaction_id: '4200002294202407303990247132',
+                trade_type: 'NATIVE',
+                trade_state: 'SUCCESS',
+                trade_state_desc: '支付成功',
+                bank_type: 'OTHERS',
+                attach: '',
+                success_time: '2024-07-30T21:00:38+08:00',
+                payer: { openid: 'oBfC06tjihIkI2VXnw5y_Npjtdmo' },
+                amount: {
+                  total: 1,
+                  payer_total: 1,
+                  currency: 'CNY',
+                  payer_currency: 'CNY'
+                }
+              }
+            }
+         */
       } catch (e) {
         console.log(e);
+        throw e;
       }
-      res.status(200).end();
     } catch (error) {
       log({ error });
       next(error);
