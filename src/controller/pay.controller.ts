@@ -7,6 +7,9 @@ import { AlipaySdk } from 'alipay-sdk';
 import Transaction from '@/classes/Transcation';
 import { generateSign, verifySign } from '@/lib/jwt';
 import { PAY_SIGN_TOKEN } from '@/config';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import wepayDecrypt from '@/lib/wepayDecrypt';
 
 const alipaySdk = new AlipaySdk({
   appId: '2021004153648869',
@@ -45,8 +48,17 @@ class PayController {
 
   public wepay_callback = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const privateKey = await readFile(path.resolve(__dirname, '../../assets/1680223610_20240702_cert/apiclient_key.pem'), {
+        encoding: 'utf-8',
+      });
       console.log({ wepay_callback: req.body });
-      res.status(200);
+      try {
+        const data = wepayDecrypt(req.body.resource.ciphertext, privateKey, 'P4hOhAbAy2W7', 'transaction');
+        console.log({ data });
+      } catch (e) {
+        console.log(e);
+      }
+      res.status(200).end();
     } catch (error) {
       log({ error });
       next(error);
