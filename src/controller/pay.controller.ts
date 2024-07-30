@@ -48,7 +48,9 @@ class PayController {
         const data = JSON.parse(Aes.AesGcm.decrypt(nonce, apiv3Key, ciphertext, associated_data));
         console.log({ data });
         if (!data) throw Error('decrypt error');
-        const notifyServer = await axios.post(`https://api.hdlovers.com/pay/check?out_trade_no=${data.out_trade_no}&sid=henanbisai`, data);
+        const notifyServer = await axios.post(`https://api.hdlovers.com/pay/check?out_trade_no=${data.out_trade_no}&sid=henanbisai`, data, {
+          headers: { 'content-type': 'application/json' },
+        });
         console.log({ notifyServer });
         if (notifyServer.status === 200) res.status(200).end();
         else res.status(notifyServer.status).end();
