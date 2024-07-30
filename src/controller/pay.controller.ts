@@ -48,7 +48,7 @@ class PayController {
     try {
       console.log({ wepay_callback: req.body });
       try {
-        const data = wepayDecrypt(req.body.resource.ciphertext, 'P4hOhAbAy2W7', 'transaction');
+        const data = wepayDecrypt(req.body.resource.ciphertext, req.body.resource.nonce, req.body.resource.associated_data);
         console.log({ data });
       } catch (e) {
         console.log(e);
