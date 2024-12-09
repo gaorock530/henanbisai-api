@@ -19,6 +19,15 @@ const alipaySdk = new AlipaySdk({
 class PayController {
   // private payService = new PayService();
 
+  public test = async (req: Request, res: Response, next: NextFunction) => {
+    const { usage, amount, subject, transactionId, openid } = req.body;
+    if (!usage || usage !== 'onethingonecode') throw new HttpException(400, 'usage');
+    if (!amount) throw new HttpException(400, 'amount');
+    if (!subject) throw new HttpException(400, 'subject');
+    if (!openid) throw new HttpException(400, 'openid');
+    res.send({ usage, amount, subject, openid });
+  };
+
   public otocPay = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { usage, amount, subject, transactionId, openid } = req.body;
