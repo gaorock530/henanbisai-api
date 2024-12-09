@@ -12,12 +12,13 @@ npm install --only=dev
 - `git config --global https.proxy 127.0.0.1:10809`
 
 ### check:
-- lsof  -i:5000
+
+- lsof -i:5000
 
 ### kill:
+
 - sudo fuser -k -n tcp 80
-
-
+- sudo kill -9 $(sudo lsof -t -i :5551)
 
 ## KeyWords
 
