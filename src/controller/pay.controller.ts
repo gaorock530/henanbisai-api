@@ -56,7 +56,7 @@ class PayController {
           total: amount,
           currency: 'CNY',
         }, //【订单金额】 订单金额
-        buyer: { openid },
+        payer: { openid },
       };
 
       const sign = await wepaySign(method, url, body);
