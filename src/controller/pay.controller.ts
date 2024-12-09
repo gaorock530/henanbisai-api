@@ -29,11 +29,11 @@ class PayController {
 
       const method = 'POST';
       // const method = 'GET';
-      const url = '/v3/pay/transactions/native';
+      const url = '/v3/pay/transactions/jsapi';
       // const url = '/v3/certificates';
       const origin = 'https://api.mch.weixin.qq.com';
       const body = {
-        appid: 'wxe82604d9a68ca8cf', // 【公众号ID】 公众号ID (影袭科技) wxe82604d9a68ca8cf
+        appid: 'wxe82604d9a68ca8cf', // 【公众号ID】 公众号ID (影袭科技) wxe82604d9a68ca8cf  // 任意码： wxb02245b16056a2d2
         mchid: '1680223610', // 【直连商户号】 直连商户号
         description: subject, // 【商品描述】 商品描述
         out_trade_no: transactionId || generateTradeNo(), // 【商户订单号】 商户系统内部订单号，只能是数字、大小写字母_-*且在同一个商户号下唯一
@@ -42,7 +42,7 @@ class PayController {
           total: amount,
           currency: 'CNY',
         }, //【订单金额】 订单金额
-        buyer: openid,
+        buyer: { openid },
       };
 
       const sign = await wepaySign(method, url, body);
@@ -50,6 +50,7 @@ class PayController {
       log({ sign });
       const payAction = await axios.post(origin + url, body, {
         headers: {
+          Authorization: sign,
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
