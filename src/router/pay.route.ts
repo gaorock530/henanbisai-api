@@ -19,6 +19,7 @@ class PayRoute implements RoutesInterface {
     this.router.get(`${this.path}/alipay_callback`, this.payController.alipay_callback);
     this.router.post(`${this.path}/wepay_callback`, this.payController.wepay_callback);
     this.router.post(`${this.path}/alipay_notice`, this.payController.alipay_notice);
+    this.router.post(`${this.path}/otocPay`, this.payController.otocPay);
   }
 }
 

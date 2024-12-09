@@ -6,6 +6,16 @@ export function isSameAsToday(date: string) {
   const the = new Date(date).toISOString();
   return now.slice(0, 10) === the.slice(0, 10);
 }
+export function getNonce(len = 32) {
+  let str = '';
+  for (let i = 0; i < len / 2; i++) {
+    const hexbase = Math.floor(Math.random() * 256);
+    const digits = hexbase.toString(16).padStart(2, '0').toUpperCase();
+    str += digits;
+  }
+
+  return str;
+}
 
 export const roles = ['user:normal', 'user:month', 'user:year', 'user:forever', 'admin:normal', 'admin:owner'];
 

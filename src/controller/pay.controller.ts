@@ -1,8 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
+import { HttpException } from '@lib/HttpException';
 import log from '@/lib/log';
 import { AlipaySdk } from 'alipay-sdk';
 import { Aes } from 'wechatpay-axios-plugin';
 import axios from 'axios';
+import { generateTradeNo } from '@/lib/tools';
+import wepaySign from '@/lib/wepaySign';
 
 const alipaySdk = new AlipaySdk({
   appId: '2021004153648869',
@@ -15,6 +18,48 @@ const alipaySdk = new AlipaySdk({
 
 class PayController {
   // private payService = new PayService();
+
+  public otocPay = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { usage, amount, subject, transactionId, openid } = req.body;
+      if (!usage || usage !== 'onethingonecode') throw new HttpException(400, 'usage');
+      if (!amount) throw new HttpException(400, 'amount');
+      if (!subject) throw new HttpException(400, 'subject');
+      if (!openid) throw new HttpException(400, 'openid');
+
+      const method = 'POST';
+      // const method = 'GET';
+      const url = '/v3/pay/transactions/native';
+      // const url = '/v3/certificates';
+      const origin = 'https://api.mch.weixin.qq.com';
+      const body = {
+        appid: 'wxe82604d9a68ca8cf', // 【公众号ID】 公众号ID (影袭科技) wxe82604d9a68ca8cf
+        mchid: '1680223610', // 【直连商户号】 直连商户号
+        description: subject, // 【商品描述】 商品描述
+        out_trade_no: transactionId || generateTradeNo(), // 【商户订单号】 商户系统内部订单号，只能是数字、大小写字母_-*且在同一个商户号下唯一
+        notify_url: `https://api.henanbisai.com/pay/wepay_callback`, // 【通知地址】 异步接收微信支付结果通知的回调地址，通知URL必须为外网可访问的URL，不能携带参数。 公网域名必须为HTTPS，如果是走专线接入，使用专线NAT IP或者私有回调域名可使用HTTP
+        amount: {
+          total: amount,
+          currency: 'CNY',
+        }, //【订单金额】 订单金额
+        buyer: openid,
+      };
+
+      const sign = await wepaySign(method, url, body);
+      // WECHATPAY2-SHA256-RSA2048
+      log({ sign });
+      const payAction = await axios.post(origin + url, body, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      res.send(payAction.data);
+    } catch (error) {
+      log({ error });
+      next(error);
+    }
+  };
 
   public alipay_callback = async (req: Request, res: Response, next: NextFunction) => {
     try {
