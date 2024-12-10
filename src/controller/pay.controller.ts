@@ -47,13 +47,13 @@ class PayController {
       // const url = '/v3/certificates';
       const origin = 'https://api.mch.weixin.qq.com';
       const body = {
-        appid: appid || 'wxe82604d9a68ca8cf', // 【公众号ID】 公众号ID (影袭科技) wxe82604d9a68ca8cf  // 任意码： wxb02245b16056a2d2
+        appid: appid || 'wxb02245b16056a2d2', // 大坑！！这里填写小程序APPID，而不是公众号APPID 【公众号ID】 公众号ID (影袭科技) wxe82604d9a68ca8cf  // 任意码： wxb02245b16056a2d2
         mchid: '1680223610', // 【直连商户号】 直连商户号
         description: subject, // 【商品描述】 商品描述
         out_trade_no: transactionId || generateTradeNo(), // 【商户订单号】 商户系统内部订单号，只能是数字、大小写字母_-*且在同一个商户号下唯一
         notify_url: `https://api.henanbisai.com/pay/wepay_callback`, // 【通知地址】 异步接收微信支付结果通知的回调地址，通知URL必须为外网可访问的URL，不能携带参数。 公网域名必须为HTTPS，如果是走专线接入，使用专线NAT IP或者私有回调域名可使用HTTP
         amount: {
-          total: Number(amount),
+          total: Number(amount), // 中坑！！！这里默认是字符串，需要转换成数字，否则不符合https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi接口，更会影响后面的签名
           currency: 'CNY',
         }, //【订单金额】 订单金额
         payer: { openid },
