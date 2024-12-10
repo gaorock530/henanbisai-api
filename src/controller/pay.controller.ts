@@ -35,7 +35,7 @@ class PayController {
 
   public otocPay = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { usage, amount, subject, transactionId, openid } = req.body;
+      const { usage, amount, subject, transactionId, openid, appid } = req.body;
       if (!usage || usage !== 'onethingonecode') throw new HttpException(400, 'usage');
       if (!amount) throw new HttpException(400, 'amount');
       if (!subject) throw new HttpException(400, 'subject');
@@ -47,7 +47,7 @@ class PayController {
       // const url = '/v3/certificates';
       const origin = 'https://api.mch.weixin.qq.com';
       const body = {
-        appid: 'wxb02245b16056a2d2', // 【公众号ID】 公众号ID (影袭科技) wxe82604d9a68ca8cf  // 任意码： wxb02245b16056a2d2
+        appid: appid || 'wxe82604d9a68ca8cf', // 【公众号ID】 公众号ID (影袭科技) wxe82604d9a68ca8cf  // 任意码： wxb02245b16056a2d2
         mchid: '1680223610', // 【直连商户号】 直连商户号
         description: subject, // 【商品描述】 商品描述
         out_trade_no: transactionId || generateTradeNo(), // 【商户订单号】 商户系统内部订单号，只能是数字、大小写字母_-*且在同一个商户号下唯一
