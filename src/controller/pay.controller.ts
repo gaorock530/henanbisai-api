@@ -53,7 +53,7 @@ class PayController {
         out_trade_no: transactionId || generateTradeNo(), // 【商户订单号】 商户系统内部订单号，只能是数字、大小写字母_-*且在同一个商户号下唯一
         notify_url: `https://api.henanbisai.com/pay/wepay_callback`, // 【通知地址】 异步接收微信支付结果通知的回调地址，通知URL必须为外网可访问的URL，不能携带参数。 公网域名必须为HTTPS，如果是走专线接入，使用专线NAT IP或者私有回调域名可使用HTTP
         amount: {
-          total: amount,
+          total: Number(amount),
           currency: 'CNY',
         }, //【订单金额】 订单金额
         payer: { openid },
