@@ -46,11 +46,12 @@ class PayController {
       const url = '/v3/pay/transactions/jsapi';
       // const url = '/v3/certificates';
       const origin = 'https://api.mch.weixin.qq.com';
+      const out_trade_no = transactionId || generateTradeNo();
       const body = {
         appid: appid || 'wxb02245b16056a2d2', // 大坑！！这里填写小程序APPID，而不是公众号APPID 【公众号ID】 公众号ID (影袭科技) wxe82604d9a68ca8cf  // 任意码： wxb02245b16056a2d2
         mchid: '1680223610', // 【直连商户号】 直连商户号
         description: subject, // 【商品描述】 商品描述
-        out_trade_no: transactionId || generateTradeNo(), // 【商户订单号】 商户系统内部订单号，只能是数字、大小写字母_-*且在同一个商户号下唯一
+        out_trade_no: out_trade_no, // 【商户订单号】 商户系统内部订单号，只能是数字、大小写字母_-*且在同一个商户号下唯一
         notify_url: `https://api.henanbisai.com/pay/wepay_callback`, // 【通知地址】 异步接收微信支付结果通知的回调地址，通知URL必须为外网可访问的URL，不能携带参数。 公网域名必须为HTTPS，如果是走专线接入，使用专线NAT IP或者私有回调域名可使用HTTP
         amount: {
           total: Number(amount), // 中坑！！！这里默认是字符串，需要转换成数字，否则不符合https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi接口，更会影响后面的签名
@@ -69,7 +70,13 @@ class PayController {
           'Content-Type': 'application/json',
         },
       });
-      res.send(payAction.data);
+      if (!payAction.data.prepay_id) throw new HttpException(400, 'prepay_id');
+
+      res.send({
+        prepay_id: payAction.data.prepay_id,
+        out_trade_no,
+        amount,
+      });
     } catch (error) {
       log({ error });
       next(error);
@@ -108,12 +115,24 @@ class PayController {
         const data = JSON.parse(Aes.AesGcm.decrypt(nonce, apiv3Key, ciphertext, associated_data));
         console.log({ data });
         if (!data) throw Error('decrypt error');
-        const notifyServer = await axios.post(`https://api.hdlovers.com/pay/check?out_trade_no=${data.out_trade_no}&sid=henanbisai`, data, {
-          headers: { 'content-type': 'application/json' },
-        });
-        console.log({ notifyServer });
-        if (notifyServer.status === 200) res.status(200).end();
-        else res.status(notifyServer.status).end();
+        if (data.appid === 'wxb02245b16056a2d2') {
+          if (data.trade_state !== 'SUCCESS') {
+            res.status(200).end();
+            return;
+          }
+          const notifyServerRes = await axios.post(`https://api.yingxitech.com/order/create`, data, {
+            headers: { 'content-type': 'application/json' },
+          });
+          if (notifyServerRes.status === 200) res.status(200).end();
+          else res.status(notifyServerRes.status).end();
+        } else if (data.appid === 'wxe82604d9a68ca8cf') {
+          const notifyServer = await axios.post(`https://api.hdlovers.com/pay/check?out_trade_no=${data.out_trade_no}&sid=henanbisai`, data, {
+            headers: { 'content-type': 'application/json' },
+          });
+          log({ notifyServer });
+          if (notifyServer.status === 200) res.status(200).end();
+          else res.status(notifyServer.status).end();
+        }
         /**
          * {
               data: {
