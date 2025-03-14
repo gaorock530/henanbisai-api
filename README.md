@@ -4,6 +4,10 @@ openssl req -x509 -sha256 -days 356 -nodes -newkey rsa:2048 -subj "/CN=demo.mlop
 
 ##
 
+scp ./\* ubuntu@49.232.45.183:~/ssl/api.henanbisai.com/
+
+##
+
 npm install --only=dev
 
 ## github 443 error
